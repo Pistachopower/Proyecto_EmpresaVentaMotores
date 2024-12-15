@@ -1,0 +1,25 @@
+<div>
+    <h2>Nombre: {{ empleado.empleado|upper }}</h2>
+    <p>apellido: {{ empleado.apellido }}</p>
+    <p>cargo: {{ empleado.cargo }}</p>
+    <p>fecha contratación:  {{ empleado.fecha_contratacion|date:"d-m-Y" }}</p>
+
+
+
+
+    <div>
+        <!-- Enlace estilizado como botón para actualizar el cliente -->
+        <a href="{% url 'empleado_update' empleado.id%}" class="btn btn-outline-success mt-2 mb-5">Actualizar empleado</a>
+        
+        <!-- Formulario para eliminar  -->
+        <form action="{% url 'eliminar_empleado' empleado.id%}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger mt-2 mb-5" 
+                onclick="return confirm('¿Estás seguro de que deseas eliminar este empleado? Esta acción no se puede deshacer.');">
+                Eliminar empleado
+            </button>
+        </form>
+    </div>
+
+
+</div>

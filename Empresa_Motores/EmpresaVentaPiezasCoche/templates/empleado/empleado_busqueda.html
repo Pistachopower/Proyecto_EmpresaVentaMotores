@@ -1,0 +1,31 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load django_bootstrap5 %}
+
+    <form action="{% url 'empleado_busqueda' %}" method="GET" enctype="multipart/form-data">
+        
+        {% csrf_token %}
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.empleado show_label=True %}
+        </div>
+
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.apellido show_label=True %}
+        </div>
+
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.cargo show_label=True %}
+        </div>
+
+
+
+
+        <button type="submit" class="btn btn-primary">Buscar cliente</button>
+        
+    </form>
+
+{% endblock %}

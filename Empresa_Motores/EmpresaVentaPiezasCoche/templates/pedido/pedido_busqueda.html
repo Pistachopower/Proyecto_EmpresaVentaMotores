@@ -1,0 +1,31 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load django_bootstrap5 %}
+
+    <form action="{% url 'pedido_busqueda' %}" method="GET" enctype="multipart/form-data">
+        
+        {% csrf_token %}
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.pedido show_label=True %}
+        </div>
+
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.fecha_pedido show_label=True %}
+        </div>
+
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.total_importe show_label=True %}
+        </div>
+
+
+
+
+        <button type="submit" class="btn btn-primary">Buscar pedido</button>
+        
+    </form>
+
+{% endblock %}

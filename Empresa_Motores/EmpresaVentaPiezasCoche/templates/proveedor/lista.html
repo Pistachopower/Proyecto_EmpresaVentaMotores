@@ -1,0 +1,19 @@
+{% extends 'principal.html' %}
+
+{% load static %}
+
+{% block cabecera %}
+<h1>Proveedores</h1>
+<img src="{% static 'images/LogoEmpresa.png' %}" alt="Logo"/>
+{% endblock %}
+
+{% block contenido %}
+
+  
+    {% for proveedor  in listar_proveedor %}
+        {% include 'proveedor/proveedor.html' %}
+    {% empty %}
+        <p>No hay proveedores disponibles.</p>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,55 @@
+
+
+{% extends 'principal.html' %}
+
+{% load static %}
+
+{% load django_bootstrap5 %}
+
+{% block cabecera %}
+<h1>CREAR CLIENTE</h1>
+<img src="{% static 'images/LogoEmpresa.png' %}" alt="Logo"/>
+{% endblock %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <h2>Crear cliente</h2>
+    <form action = "{% url 'clientes_create' %}" method="post">
+        {% csrf_token %}
+
+        <!-- Campo: Nombre -->
+        <div class="mb-4">
+             <!-- form.cliente: llama al archivo form y usar el atributo cliente -->
+            {% bootstrap_field form.cliente show_label=True %}
+        </div>
+        
+        <!-- Campo: Apellido -->
+        <div class="mb-4">
+            {% bootstrap_field form.apellido show_label=True %}
+        </div>
+
+        <!-- Campo: Correo -->
+        <div class="mb-4">
+            {% bootstrap_field form.correo show_label=True %}
+        </div>
+
+        <!-- Campo: tipo_clientes -->
+        <div class="mb-4">
+            {% bootstrap_field form.tipo_clientes show_label=True %}
+        </div>
+        
+        <!-- Campo: direccion -->
+        <div class="mb-4">
+            {% bootstrap_field form.direccion show_label=True %}
+        </div>
+
+        <!-- Campo: empleado -->
+        <div class="mb-4">
+            {% bootstrap_field form.empleado show_label=True %}
+        </div>
+        
+
+        <button type="submit" class="btn btn-primary">Crear cliente</button>
+    </form>
+</div>
+{% endblock %}

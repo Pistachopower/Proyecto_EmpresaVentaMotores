@@ -1,0 +1,23 @@
+<div>
+    <h2>Método de pago: {{ metodopago.metodo_pago|upper }}</h2>
+    <p>nombre: {{metodopago.nombre  }}</p>
+    <p>tipo_pago: {{ metodopago.tipo_pago }}</p>
+    <p>fecha de creacion:  {{ metodopago.fecha_creacion|date:"d-m-Y" }}</p> 
+    <p>fecha de última actualizacion:  {{ metodopago.fecha_ultima_actualizacion|date:"d-m-Y" }}</p>
+    <p>pagado: {{ metodopago.pagado }}</p>
+
+
+    <div>
+        <!-- Enlace estilizado como botón para actualizar  -->
+        <a href="{% url 'metodopago_update' metodopago.id%}" class="btn btn-outline-success mt-2 mb-5">Actualizar método de pago</a>
+        
+        <!-- Formulario para eliminar con confirmación -->
+        <form action="{% url 'eliminar_metodopago' metodopago.id%}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger mt-2 mb-5" 
+                onclick="return confirm('¿Estás seguro de que deseas eliminar este método de pago? Esta acción no se puede deshacer.');">
+                Eliminar pedido
+            </button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div>
+    <h2>Nombre: {{ cliente.cliente|upper }}</h2>
+    <p>apellido: {{ cliente.apellido }}</p>
+    <p>correo: {{ cliente.correo }}</p>
+    <p>tipo de cliente: {{ cliente.get_tipo_clientes_display }}</p>
+
+
+
+    <p>direccion: {{ cliente.direccion }}</p>
+    <p>empleado: {{ cliente.empleado }}</p>
+
+    <div>
+        <!-- Enlace estilizado como botón para actualizar el cliente -->
+        <a href="{% url 'clientes_update' cliente.id%}" class="btn btn-outline-success mt-2 mb-5">Actualizar cliente</a>
+        
+        <!-- Formulario para eliminar el cliente con confirmación -->
+        <form action="{% url 'eliminar_cliente' cliente.id%}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger mt-2 mb-5" 
+                onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente? Esta acción no se puede deshacer.');">
+                Eliminar Cliente
+            </button>
+        </form>
+    </div>
+
+
+</div>

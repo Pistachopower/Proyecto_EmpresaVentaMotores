@@ -1,0 +1,23 @@
+<div>
+    <h2>Nombre: {{ proveedor.proveedor|upper }}</h2>
+    <p>telefono: {{ proveedor.telefono }}</p>
+    <p>correo: {{ proveedor.correo }}</p>
+    <p>direccion: {{ proveedor.direccion }}</p>
+
+
+    <div>
+        <!-- Enlace estilizado como botón para actualizar el cliente -->
+        <a href="{% url 'proveedor_update' proveedor.id%}" class="btn btn-outline-success mt-2 mb-5">Actualizar proveedor</a>
+        
+        <!-- Formulario para eliminar el cliente con confirmación -->
+        <form method="post" action="{% url 'eliminar_proveedor' proveedor.id%}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger mt-2 mb-5" 
+                onclick="return confirm('¿Estás seguro de que deseas eliminar este proveedor? Esta acción no se puede deshacer.');">
+                Eliminar proveedor
+            </button>
+        </form>
+    </div>
+
+
+</div>

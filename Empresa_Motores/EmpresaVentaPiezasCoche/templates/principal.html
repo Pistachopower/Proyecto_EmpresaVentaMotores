@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotorPartExpress</title>
+
+     <!-- Cargar el archivo CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Cargar el archivo JavaScript -->
+    <script src="{% static 'js/script.js' %}" defer></script>
+
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+</head>
+<body>
+    <!--
+     <!-- Menú de navegación -->
+     {% include 'estructura/menu.html' %}
+
+     <!-- Cabecera -->
+     <header>
+         {% block cabecera %}
+         <h1>Bienvenido al MotorPartExpress</h1>
+         <img src="{% static 'images/LogoEmpresa.png' %}" alt="Logo"/>
+         {% endblock %}
+     </header>
+ 
+     <!-- Contenido principal -->
+     <main>
+         {% block contenido %}
+             <p>Bienvenido a MotorPartExpress </p>
+         {% endblock %}
+     </main>
+ 
+     <footer>
+         <!-- Pie de página -->
+         {% include 'estructura/footer.html' %}
+     </footer>
+    
+   
+
+</body>
+</html>

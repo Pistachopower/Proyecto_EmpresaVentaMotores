@@ -1,0 +1,41 @@
+<div>
+    <h2>Nombre pieza: {{ piezamotor.pieza|upper }}</h2>
+
+    <!--manytomany-->
+    <p>Proveedores: 
+        {% for proveedor in piezamotor.proveedor.all %}
+            {{ proveedor.proveedor }}
+            <br>
+        {% endfor %}
+    </p>
+    
+    <p>Pedidos: 
+        {% for pedido in piezamotor.pedido.all %}
+            {{ pedido.pedido }}
+            <br>
+        {% endfor %}
+    </p>
+    
+    <p>precio: {{ piezamotor.precio }}</p>
+    <p>descripcion: {{ piezamotor.descripcion }}</p>
+    <p>stock_disponible: {{ piezamotor.stock_disponible }}</p>
+
+
+
+
+    <div>
+        <!-- Enlace estilizado como botón para actualizar el cliente -->
+        <a href="{% url 'piezamotor_update' piezamotor.id%}" class="btn btn-outline-success mt-2 mb-5">Actualizar pieza de motor</a>
+        
+        <!-- Formulario para eliminar el cliente con confirmación -->
+        <form action="{% url 'eliminar_piezamotor' piezamotor.id%}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger mt-2 mb-5" 
+                onclick="return confirm('¿Estás seguro de que deseas eliminar la pieza de motor? Esta acción no se puede deshacer.');">
+                Eliminar pieza de motor
+            </button>
+        </form>
+    </div>
+
+    
+</div>

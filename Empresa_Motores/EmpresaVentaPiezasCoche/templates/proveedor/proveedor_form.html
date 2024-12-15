@@ -1,0 +1,44 @@
+
+
+{% extends 'principal.html' %}
+
+{% load static %}
+
+{% load django_bootstrap5 %}
+
+{% block cabecera %}
+<h1>CREAR PROVEEDOR</h1>
+<img src="{% static 'images/LogoEmpresa.png' %}" alt="Logo"/>
+{% endblock %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <h2>Crear proveedor</h2>
+    <form action = "{% url 'proveedor_create' %}" method="post">
+        {% csrf_token %}
+
+        
+        <div class="mb-4">
+            
+            {% bootstrap_field form.proveedor show_label=True %}
+        </div>
+        
+        
+        <div class="mb-4">
+            {% bootstrap_field form.telefono show_label=True %}
+        </div>
+
+        <!-- Campo: Correo -->
+        <div class="mb-4">
+            {% bootstrap_field form.correo show_label=True %}
+        </div>
+
+        <!-- Campo: tipo_clientes -->
+        <div class="mb-4">
+            {% bootstrap_field form.direccion show_label=True %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Crear proveedor</button>
+    </form>
+</div>
+{% endblock %}

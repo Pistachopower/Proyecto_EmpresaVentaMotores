@@ -1,0 +1,30 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load django_bootstrap5 %}
+
+    <form action="{% url 'metodopago_busqueda' %}" method="GET" enctype="multipart/form-data">
+        
+        {% csrf_token %}
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.nombre show_label=True %}
+        </div>
+
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.fecha_creacion show_label=True %}
+        </div>
+
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.fecha_ultima_actualizacion show_label=True %}
+        </div>
+
+
+
+        <button type="submit" class="btn btn-primary">Buscar metodo de pago</button>
+        
+    </form>
+
+{% endblock %}

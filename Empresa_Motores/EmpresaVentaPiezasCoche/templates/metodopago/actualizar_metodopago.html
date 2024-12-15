@@ -1,0 +1,42 @@
+{% extends 'principal.html' %}
+
+{% load static %}
+
+{% load django_bootstrap5 %}
+
+{% block cabecera %}
+<h1>Actualizar</h1>
+<img src="{% static 'images/LogoEmpresa.png' %}" alt="Logo"/>
+{% endblock %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <h2>Actualizar método de pago</h2>
+    <form action = "{% url 'metodopago_update' metodo_pago.id %}" method="post">
+        {% csrf_token %}
+
+        <div class="mb-4">
+            {% bootstrap_field form.metodo_pago show_label=True %}
+        </div>
+        
+        <div class="mb-4">
+            {% bootstrap_field form.nombre show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field form.tipo_pago show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field form.fecha_creacion show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field form.pagado show_label=True %}
+        </div>
+        
+    
+        <button type="submit" class="btn btn-primary">Actualizar método de pago</button>
+    </form>
+</div>
+{% endblock %}

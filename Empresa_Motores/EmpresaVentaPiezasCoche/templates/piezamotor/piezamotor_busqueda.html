@@ -1,0 +1,26 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load django_bootstrap5 %}
+
+    <form action="{% url 'piezamotor_busqueda' %}" method="GET" enctype="multipart/form-data">
+        
+        {% csrf_token %}
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.pieza show_label=True %}
+        </div>
+
+        <div>
+            {% bootstrap_field formulario.precio_min %}
+        </div>
+        
+        <div>
+            {% bootstrap_field formulario.precio_max %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Buscar pieza</button>
+        
+    </form>
+
+{% endblock %}

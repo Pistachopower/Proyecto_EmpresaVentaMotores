@@ -1,0 +1,40 @@
+
+
+{% extends 'principal.html' %}
+
+{% load static %}
+
+{% load django_bootstrap5 %}
+
+{% block cabecera %}
+<h1>Actualizar</h1>
+<img src="{% static 'images/LogoEmpresa.png' %}" alt="Logo"/>
+{% endblock %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <h2>Actualizar empleado</h2>
+    <form action = "{% url 'empleado_update' empleado.id %}" method="post">
+        {% csrf_token %}
+
+        <div class="mb-4">
+            {% bootstrap_field form.empleado show_label=True %}
+        </div>
+        
+        <div class="mb-4">
+            {% bootstrap_field form.apellido show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field form.cargo show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field form.fecha_contratacion show_label=True %}
+        </div>
+        
+    
+        <button type="submit" class="btn btn-primary">Actualizar empleado</button>
+    </form>
+</div>
+{% endblock %}

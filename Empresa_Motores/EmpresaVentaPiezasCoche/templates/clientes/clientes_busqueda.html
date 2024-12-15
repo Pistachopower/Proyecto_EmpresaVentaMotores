@@ -1,0 +1,37 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+{% load django_bootstrap5 %}
+
+    <form action="{% url 'clientes_busqueda' %}" method="GET" enctype="multipart/form-data">
+        
+        {% csrf_token %}
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.cliente show_label=True %}
+        </div>
+
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.apellido show_label=True %}
+        </div>
+
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.correo show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.tipo_clientes show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.direccion show_label=True %}
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Buscar cliente</button>
+        
+    </form>
+
+{% endblock %}

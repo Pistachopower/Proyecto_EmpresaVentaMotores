@@ -1,0 +1,23 @@
+<div>
+    <h2>Nombre pedido: {{ pedido.pedido|upper }}</h2>
+    <p>estado: {{pedido.get_estado_display  }}</p>
+    <p>importe: {{ pedido.total_importe }}</p>
+    <p>fecha pedido:  {{ pedido.fecha_pedido|date:"d-m-Y" }}</p>
+    <p>metodo de pago: {{ pedido.metodo_pago }}</p>
+    <p>cliente: {{ pedido.cliente }}</p>
+
+
+    <div>
+        <!-- Enlace estilizado como botón para actualizar  -->
+        <a href="{% url 'pedido_update' pedido.id%}" class="btn btn-outline-success mt-2 mb-5">Actualizar pedido</a>
+        
+        <!-- Formulario para eliminar con confirmación -->
+        <form action="{% url 'eliminar_pedido' pedido.id%}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger mt-2 mb-5" 
+                onclick="return confirm('¿Estás seguro de que deseas eliminar este pedido? Esta acción no se puede deshacer.');">
+                Eliminar pedido
+            </button>
+        </form>
+    </div>
+</div>
