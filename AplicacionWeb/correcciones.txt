@@ -1,0 +1,19 @@
+No se ha implementado el uso de imágenes:-1
+No se muestran los mensajes en la aplicación: -0,25
+Obtienes parámetros en tus formularios que después no usas: -0,25
+No se puede usar el .all() antes del filtro:-0,25
+Para qué sirve: raise forms.ValidationError("Debe proporcionar al menos un campo para realizar la búsqueda."): -0,25
+Muchos de los formularios de búsqueda le faltan validar un campo más:-0,5
+
+Incluyes: help_texts = {
+           "empleado": "100 caracteres como máximo",
+       }
+Cuando no existe este campo en muchos formularios:-0,25
+
+En empleado no hay coherencia con esta validación:(-0,25)
+     if len(apellido) < 1:
+            self.add_error('apellido', 'Al menos debes colocar 8 caracteres')
+
+En proveedor el teléfono es de tipo text, al igual que en Cliente el apellido?: -0,25
+
+Método de Pago la edición con la fecha no se ha controlado:-0,25
