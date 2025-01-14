@@ -3,6 +3,8 @@ from .models import Proveedor, Empleado, Cliente, MetodoPago, Pedido, PiezaMotor
 from django.db.models import Q, Sum
 from .forms import *
 from django.contrib import messages
+from django.contrib.auth.models import Group
+from django.contrib.auth import login
 
 # Create your views here.
 def index(request):
