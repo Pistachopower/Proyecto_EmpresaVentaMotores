@@ -3,6 +3,32 @@ from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser #agregamos estos para la autenticacion
+
+class Usuario(AbstractUser):
+    #clave-valor
+    ADMINISTRADOR = 1
+    CLIENTE = 2
+    PROVEEDOR = 3
+    ROLES = [
+        (ADMINISTRADOR, 'administrador'),
+        (CLIENTE, 'cliente'),
+        (PROVEEDOR, 'proveedor'),
+    ]
+   
+    role = models.PositiveSmallIntegerField(choices=ROLES, default=1)
+
+#usuarios 
+#falta hacer migrate (p.11)
+class Cliente(models.Model):
+    cliente= models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    
+class Proveedor(models.Model):
+    proveedor= models.OneToOneField(Usuario, on_delete=models.CASCADE)
+
+
+
+
 
 #tablas independientes
 class Proveedor(models.Model):

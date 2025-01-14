@@ -8,8 +8,11 @@ from django.contrib.auth import login
 
 # Create your views here.
 def index(request):
+    
+    #"fecha_inicio" no existe en el objeto request.session. 
     if(not "fecha_inicio" in request.session):
         request.session["fecha_inicio"] = datetime.now().strftime('%d/%m/%Y %H:%M')
+         
     return render(request, 'principal.html')
 
 #lista de los modelos

@@ -42,8 +42,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_bootstrap5',
     'django_bootstrap_icons',
-    'django.contrib.auth',  
-    'django.contrib.contenttypes', 
+
 ]
 
 MIDDLEWARE = [
@@ -56,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',    
-    'django.contrib.auth.middleware.AuthenticationMiddleware', 
+    
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -133,3 +132,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 INTERNAL_IPS = ["127.0.0.1"]
+
+#se agrega esto para la autenticacion de los usuarios
+AUTH_USER_MODEL = 'EmpresaVentaPiezasCoche.Usuario'

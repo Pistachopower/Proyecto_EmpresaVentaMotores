@@ -9,6 +9,15 @@
         <!-- Menú principal -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
+                <!--fecha de sesion-->
+                <li class="nav-item text-white">
+                    Fecha inicio:
+                    <br>
+                    {{ request.session.fecha_inicio }}
+                </li>
+
+
+
                 <!-- Inicio -->
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">Inicio</a>
