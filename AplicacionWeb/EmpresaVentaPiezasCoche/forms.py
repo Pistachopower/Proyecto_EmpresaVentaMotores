@@ -4,7 +4,7 @@ from .models import Proveedor, Empleado, Cliente, MetodoPago, Pedido, PiezaMotor
 from datetime import date, datetime
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.contrib.auth.forms import UserCreationForm
 
 class clientesForm(forms.ModelForm):
 
@@ -408,6 +408,7 @@ class BusquedaPiezaMotorForm(forms.Form):
            
         return cleaned_data
     
+#POR AQUI º 
 class BusquedaMetodoPagoForm(forms.Form):
     nombre = forms.CharField(
         required=False,
@@ -451,3 +452,21 @@ class BusquedaMetodoPagoForm(forms.Form):
             raise forms.ValidationError("Debe proporcionar al menos un campo para realizar la búsqueda.")
 
         return cleaned_data
+    
+    #Sesiones 
+    """
+    class RegistroForm(UserCreationForm):
+    roles = (
+        (Usuario.CLIENTE, 'cliente'),
+        (Usuario.PROVEEDOR, 'proveedor'),
+    )
+
+    role = forms.ChoiceField(choices=roles)
+    empresa = forms.CharField(max_length=200, required=False, label="Nombre de la Empresa")
+    rating = forms.FloatField(required=False,label="Calificación Promedia")
+
+    class Meta:
+        model = Usuario
+        fields = ('nombre', 'username', 'correo', 'telefono', 'password1', 'password2', 'role')
+    """
+    

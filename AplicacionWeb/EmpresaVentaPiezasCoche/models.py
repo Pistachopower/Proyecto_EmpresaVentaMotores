@@ -8,29 +8,42 @@ from django.contrib.auth.models import AbstractUser #agregamos estos para la aut
 class Usuario(AbstractUser):
     #clave-valor
     ADMINISTRADOR = 1
-    CLIENTE = 2
-    PROVEEDOR = 3
+    EMPLEADO = 2
+    CLIENTE = 3
     ROLES = [
         (ADMINISTRADOR, 'administrador'),
+        (EMPLEADO, 'empleado'),
         (CLIENTE, 'cliente'),
-        (PROVEEDOR, 'proveedor'),
     ]
    
-    role = models.PositiveSmallIntegerField(choices=ROLES, default=1)
+    rol = models.PositiveSmallIntegerField(choices=ROLES, default=1)
 
-#usuarios 
+
 #falta hacer migrate (p.11)
+#empleado hereda de cliente
+class Empleado(models.Model):
+    empleado= models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    
+
+#usuario
 class Cliente(models.Model):
     cliente= models.OneToOneField(Usuario, on_delete=models.CASCADE)
-    
-class Proveedor(models.Model):
-    proveedor= models.OneToOneField(Usuario, on_delete=models.CASCADE)
 
 
 
 
 
 #tablas independientes
+#tabla 
+class Empleado(models.Model):
+    empleado = models.CharField(max_length=100)
+    apellido = models.TextField()
+    cargo = models.CharField(max_length=100)
+    fecha_contratacion = models.DateField(null=True, blank=True) #Fecha de contratación 
+
+    def __str__(self):
+        return f"{self.empleado} {self.apellido}" 
+
 class Proveedor(models.Model):
     proveedor = models.CharField(max_length=100) #los id se ponen a 100 porque puede incrementar los registros
     telefono = models.TextField()
@@ -41,14 +54,7 @@ class Proveedor(models.Model):
         return self.proveedor
 
 
-class Empleado(models.Model):
-    empleado = models.CharField(max_length=100)
-    apellido = models.TextField()
-    cargo = models.CharField(max_length=100)
-    fecha_contratacion = models.DateField(null=True, blank=True) #Fecha de contratación 
 
-    def __str__(self):
-        return f"{self.empleado} {self.apellido}"
 
 
 class Cliente(models.Model):
