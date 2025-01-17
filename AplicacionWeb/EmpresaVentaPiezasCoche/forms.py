@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import Proveedor, Empleado, Cliente, MetodoPago, Pedido, PiezaMotor, PiezaMotor_Pedido
+from .models import *
 from datetime import date, datetime
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -10,7 +10,7 @@ class clientesForm(forms.ModelForm):
 
     
     class Meta:
-        model = Cliente
+        model = Usuario
         fields = ['cliente', 'apellido', 'correo', 'tipo_clientes', 'direccion','empleado']
         help_texts = {
             "cliente": "200 caracteres como máximo",

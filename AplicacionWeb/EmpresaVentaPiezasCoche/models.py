@@ -5,36 +5,11 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser #agregamos estos para la autenticacion
 
-class Usuario(AbstractUser):
-    #clave-valor
-    ADMINISTRADOR = 1
-    EMPLEADO = 2
-    CLIENTE = 3
-    ROLES = [
-        (ADMINISTRADOR, 'administrador'),
-        (EMPLEADO, 'empleado'),
-        (CLIENTE, 'cliente'),
-    ]
-   
-    rol = models.PositiveSmallIntegerField(choices=ROLES, default=1)
-
-
-#falta hacer migrate (p.11)
-#empleado hereda de cliente
-class Empleado(models.Model):
-    empleado= models.OneToOneField(Usuario, on_delete=models.CASCADE)
-    
-
-#usuario
-class Cliente(models.Model):
-    cliente= models.OneToOneField(Usuario, on_delete=models.CASCADE)
-
-
 
 
 
 #tablas independientes
-#tabla 
+
 class Empleado(models.Model):
     empleado = models.CharField(max_length=100)
     apellido = models.TextField()
@@ -53,9 +28,17 @@ class Proveedor(models.Model):
     def __str__(self):
         return self.proveedor
 
+class Cliente(models.Model):
+    TIPO_CLIENTES = [('P', 'Particular'), ('E', 'Empresa')]
+    cliente = models.CharField(max_length=100)
+    apellido = models.CharField(max_length=100)
+    correo = models.CharField(max_length=100, unique=True)
+    tipo_clientes = models.CharField(max_length=2, choices=TIPO_CLIENTES)
+    direccion = models.TextField(null=True, blank=True) #puede existir registos de clientes sin correo
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
 
-
-
+    def __str__(self):
+        return f"{self.cliente} {self.apellido}"
 
 class Cliente(models.Model):
     TIPO_CLIENTES = [('P', 'Particular'), ('E', 'Empresa')]
@@ -119,4 +102,31 @@ class PiezaMotor_Pedido(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
     cantidad = models.IntegerField(null=True, blank=True) #se pone estos parametros para evitar el el error que no pueda ser nulo el valor
     precioTotal = models.FloatField(default=0.0) #se agrega este parametros para evitar error: Internal error: NOT NULL constraint failed
+
+class Usuario(AbstractUser):
+    #clave-valor
+    ADMINISTRADOR = 1
+    EMPLEADO = 2
+    CLIENTE = 3
+    ROLES = [
+        (ADMINISTRADOR, 'administrador'),
+        (EMPLEADO, 'empleado'),
+        (CLIENTE, 'cliente'),
+    ]
+   
+    rol = models.PositiveSmallIntegerField(choices=ROLES, default=1)
+    
+
+#falta hacer migrate (p.11)
+#empleado hereda de cliente
+class Empleado(models.Model):
+    empleado= models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    
+
+#usuario
+class Cliente(models.Model):
+    cliente= models.OneToOneField(Usuario, on_delete=models.CASCADE)
+
+
+
 
