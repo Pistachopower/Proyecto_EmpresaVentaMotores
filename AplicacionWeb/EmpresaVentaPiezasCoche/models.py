@@ -103,6 +103,7 @@ class PiezaMotor_Pedido(models.Model):
     cantidad = models.IntegerField(null=True, blank=True) #se pone estos parametros para evitar el el error que no pueda ser nulo el valor
     precioTotal = models.FloatField(default=0.0) #se agrega este parametros para evitar error: Internal error: NOT NULL constraint failed
 
+"""
 class Usuario(AbstractUser):
     #clave-valor
     ADMINISTRADOR = 1
@@ -126,6 +127,8 @@ class Empleado(models.Model):
 #usuario
 class Cliente(models.Model):
     cliente= models.OneToOneField(Usuario, on_delete=models.CASCADE)
+"""
+
 
 
 

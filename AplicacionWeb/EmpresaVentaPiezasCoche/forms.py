@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.forms import UserCreationForm
 
+"""
 class clientesForm(forms.ModelForm):
 
     
@@ -42,6 +43,8 @@ class clientesForm(forms.ModelForm):
         return self.cleaned_data
 
 
+
+"""
 
 class proveedorForm(forms.ModelForm):
     class Meta:
