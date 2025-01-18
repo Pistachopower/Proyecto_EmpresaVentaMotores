@@ -15,6 +15,11 @@ def index(request):
          
     return render(request, 'principal.html')
 
+#borra la sesion
+def borrar_session(request):
+    del request.session['fecha_inicio']
+    return render(request, 'index.html')
+
 #lista de los modelos
 def listar_proveedor(request):
     proveedor = Proveedor.objects.all()

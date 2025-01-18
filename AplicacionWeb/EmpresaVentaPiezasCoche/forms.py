@@ -82,7 +82,7 @@ class proveedorForm(forms.ModelForm):
         
         return self.cleaned_data        
   
-
+"""
 class empleadoForm(forms.ModelForm):
     class Meta:
         model = Empleado
@@ -124,6 +124,8 @@ class empleadoForm(forms.ModelForm):
             
         
         return self.cleaned_data   
+"""
+
 
 
 

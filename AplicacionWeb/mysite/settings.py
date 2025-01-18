@@ -134,4 +134,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = ["127.0.0.1"]
 
 #se agrega esto para la autenticacion de los usuarios
-#AUTH_USER_MODEL = 'EmpresaVentaPiezasCoche.Usuario'
+AUTH_USER_MODEL = 'EmpresaVentaPiezasCoche.Usuario'
