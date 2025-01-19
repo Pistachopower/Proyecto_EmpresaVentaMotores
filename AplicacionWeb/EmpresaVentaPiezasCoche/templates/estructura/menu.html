@@ -8,8 +8,7 @@
 
     <!-- Menú principal -->
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav d-flex align-items-center">
-
+      <ul class="navbar-nav d-flex align-items-center">
         <!-- fecha de sesion -->
         <li class="nav-item text-white">
           Fecha inicio:
@@ -144,25 +143,30 @@
       </ul>
 
       <!-- Formulario de búsqueda alineado a la derecha -->
-      <form class="d-flex ms-auto" role="search">
-        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" />
-        <button class="btn btn-outline-warning btn-sm me-2" type="submit">Buscar</button>
-      </form>
+      {% if not request.user.is_authenticated %}
+        <form class="d-flex ms-auto" role="search">
+          <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" />
+          <button class="btn btn-outline-warning btn-sm me-2" type="submit">Buscar</button>
+        </form>
+      {% endif %}
 
       <!-- Menu para saber cuando esta logueado o no -->
       <div class="ms-auto d-flex align-items-center">
         {% if not request.user.is_authenticated %}
-          <a class="btn btn-outline-warning btn-sm me-2" href="">Login</a>
-          <a class="btn btn-outline-warning btn-sm" href="{% url 'registrar_usuario' %}">Registrarse</a>
-        {% else %}
-          <form action="" method="POST" class="d-inline">
+          <a class="btn btn-outline-warning" href="{% url 'login' %}">Login</a>
+        {% endif %}
+
+        {% if not request.user.is_authenticated %}
+          <a class="btn btn-outline-warning ms-1" href="{% url 'registrar_usuario' %}">Registrarse</a>
+        {% endif %}
+
+        {% if request.user.is_authenticated %}
+          <form action="{% url 'logout' %}" class="d-flex m-3" role="search" method="POST">
             {% csrf_token %}
-            <button class="btn btn-outline-light btn-sm" type="submit">Desconectarse</button>
+            <button class="btn btn-light btn-outline-dark" type="submit">Desconectarse</button>
           </form>
         {% endif %}
       </div>
-      
-      
     </div>
   </div>
 </nav>
