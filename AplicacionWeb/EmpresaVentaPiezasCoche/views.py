@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
 
 
 # Create your views here.
@@ -18,21 +19,25 @@ def index(request):
     return render(request, 'principal.html')
 
 #lista de los modelos
+@login_required #para evitar que cualquier persona pueda acceder a la pagina
 def listar_proveedor(request):
     proveedor = Proveedor.objects.all()
 
     return render (request, 'proveedor/lista.html', {'listar_proveedor':proveedor})
 
+@login_required
 def listar_empleado(request):
     empleado = Empleado.objects.all()
 
     return render (request, 'empleado/lista.html', {'listar_empleado':empleado})
 
+@login_required
 def listar_clientes(request):
     cliente = Cliente.objects.select_related('empleado').all()
 
     return render (request, 'clientes/lista.html', {'listar_clientes':cliente})
 
+@login_required
 def listar_pedido(request):
     pedidos = Pedido.objects.select_related('cliente').all()
 
@@ -43,7 +48,7 @@ def listar_piezamotor(request):
 
     return render (request, 'piezamotor/lista.html', {'listar_piezamotor':piezamotor})
 
-
+@login_required
 def listar_metodopago(request):
     metodopago = MetodoPago.objects.all()
     return render (request, 'metodopago/lista.html', {'listar_metodopago':metodopago})
@@ -51,6 +56,7 @@ def listar_metodopago(request):
 
 
 #DELETE
+@login_required
 def eliminar_cliente(request,cliente_id):
     cliente = Cliente.objects.get(id=cliente_id)
     try:
@@ -62,6 +68,7 @@ def eliminar_cliente(request,cliente_id):
     #volvemos a la lista de clientes
     return redirect('listar_clientes')
 
+@login_required
 def eliminar_proveedor(request,proveedor_id):
     proveedor = Proveedor.objects.get(id=proveedor_id)
     try:
@@ -73,7 +80,7 @@ def eliminar_proveedor(request,proveedor_id):
     #volvemos a la listar_proveedor
     return redirect('listar_proveedor')
 
-
+@login_required
 def eliminar_empleado(request,empleado_id):
     empleado = Empleado.objects.get(id=empleado_id)
     try:
@@ -85,6 +92,7 @@ def eliminar_empleado(request,empleado_id):
     #volvemos a la lista
     return redirect('listar_empleado')
 
+@login_required
 def eliminar_pedido(request,pedido_id):
     pedido = Pedido.objects.get(id=pedido_id)
     try:
@@ -96,7 +104,7 @@ def eliminar_pedido(request,pedido_id):
     #volvemos a la listar
     return redirect('listar_pedido')
 
-
+@login_required
 def eliminar_piezamotor(request,piezamotor_id):
     piezamotor = PiezaMotor.objects.get(id=piezamotor_id)
     try:
@@ -108,7 +116,7 @@ def eliminar_piezamotor(request,piezamotor_id):
     #volvemos a la listar
     return redirect('listar_piezamotor')
 
-
+@login_required
 def eliminar_metodopago(request,metodopago_id):
     metodopago = MetodoPago.objects.get(id=metodopago_id)
     try:
@@ -123,7 +131,7 @@ def eliminar_metodopago(request,metodopago_id):
 
 
 #CREATE
-
+@login_required
 def clientes_create(request):
     if request.method == 'POST':
         form = clientesForm(request.POST)
@@ -138,6 +146,7 @@ def clientes_create(request):
 
     return render(request, 'clientes/clientes_form.html', {'form': form})
 
+@login_required
 def proveedor_create(request):
     if request.method == 'POST':
         form = proveedorForm(request.POST)
@@ -152,7 +161,7 @@ def proveedor_create(request):
 
     return render(request, 'proveedor/proveedor_form.html', {'form': form})
 
-
+@login_required
 def empleado_create(request):
     if request.method == 'POST':
         form = empleadoForm(request.POST)
@@ -167,6 +176,7 @@ def empleado_create(request):
 
     return render(request, 'empleado/empleado_form.html', {'form': form})
 
+@login_required
 def pedido_create(request):
     if request.method == 'POST':
         form = pedidoForm(request.POST)
@@ -181,7 +191,7 @@ def pedido_create(request):
 
     return render(request, 'pedido/pedido_form.html', {'form': form})
 
-
+@login_required
 def piezamotor_create(request):
     if request.method == 'POST':
         form = piezamotorForm(request.POST)
@@ -196,6 +206,7 @@ def piezamotor_create(request):
 
     return render(request, 'piezamotor/piezamotor_form.html', {'form': form})
 
+@login_required
 def metodopago_create(request):
     if request.method == 'POST':
         form = metodo_pagoForm(request.POST)
@@ -212,6 +223,7 @@ def metodopago_create(request):
 
 
 #UPDATE
+@login_required
 def clientes_update(request, cliente_id):
     #obtenemos el registro del cliente que se pasa por parametro
     cliente = Cliente.objects.get(id=cliente_id)
@@ -258,7 +270,7 @@ def clientes_update(request, cliente_id):
     return render(request, 'clientes/actualizar_cliente.html', {'form': form, 'cliente': cliente})
 
 
-
+@login_required
 def proveedor_update(request, proveedor_id):
     
     proveedor = Proveedor.objects.get(id=proveedor_id)
@@ -293,7 +305,7 @@ def proveedor_update(request, proveedor_id):
 
     return render(request, 'proveedor/actualizar_proveedor.html', {'form': form, 'proveedor': proveedor})
 
-
+@login_required
 def empleado_update(request, empleado_id):
     
     empleado = Empleado.objects.get(id=empleado_id)
@@ -327,7 +339,7 @@ def empleado_update(request, empleado_id):
 
     return render(request, 'empleado/actualizar_empleado.html', {'form': form, 'empleado': empleado})
 
-
+@login_required
 def pedido_update(request, pedido_id):
     
     pedido = Pedido.objects.get(id=pedido_id)
@@ -356,6 +368,7 @@ def pedido_update(request, pedido_id):
 
     return render(request, 'pedido/actualizar_pedido.html', {'form': form, 'pedido': pedido})
 
+@login_required
 def piezamotor_update(request, piezamotor_id):
     
     piezamotor = PiezaMotor.objects.get(id=piezamotor_id)
@@ -384,7 +397,7 @@ def piezamotor_update(request, piezamotor_id):
 
     return render(request, 'piezamotor/actualizar_piezamotor.html', {'form': form, 'piezamotor': piezamotor})
 
-
+@login_required
 def metodopago_update(request, metodopago_id):
     
     metodo_pago = MetodoPago.objects.get(id=metodopago_id)
@@ -415,6 +428,7 @@ def metodopago_update(request, metodopago_id):
 
 
 #read clientes_busqueda
+@login_required
 def clientes_busqueda(request):
     # Si se ha enviado el formulario (request.GET contiene datos)
     if request.GET:
@@ -477,7 +491,7 @@ def clientes_busqueda(request):
 
 
 
-
+@login_required
 def proveedor_busqueda(request):
     if request.GET:
         formulario = BusquedaProveedorForm(request.GET)
@@ -518,7 +532,7 @@ def proveedor_busqueda(request):
 
     return render(request, 'proveedor/proveedor_busqueda.html', {'formulario': formulario})
 
-
+@login_required
 def empleado_busqueda(request):
     if request.GET:
         formulario = BusquedaEmpleadoForm(request.GET)
@@ -556,7 +570,7 @@ def empleado_busqueda(request):
 
     return render(request, 'empleado/empleado_busqueda.html', {'formulario': formulario})
 
-
+@login_required
 def pedido_busqueda(request):
     if request.GET:
         formulario = BusquedaPedidoForm(request.GET)
@@ -632,7 +646,7 @@ def piezamotor_busqueda(request):
 
     return render(request, 'piezamotor/piezamotor_busqueda.html', {'formulario': formulario})
 
-
+@login_required
 def metodopago_busqueda(request):
     if request.GET:  
         formulario = BusquedaMetodoPagoForm(request.GET)
