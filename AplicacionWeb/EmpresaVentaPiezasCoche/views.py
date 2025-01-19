@@ -699,8 +699,10 @@ def registrar_usuario(request):
                 cliente.save()
                 
             elif(rol == Usuario.EMPLEADO):
-                grupo = Group.objects.get(name='Proveedores')
+                grupo = Group.objects.get(name='Empleado')
                 grupo.user_set.add(user)
+                empleado = Empleado.objects.create(usuario = user)
+                empleado.save()
                 
 
             login(request, user)
