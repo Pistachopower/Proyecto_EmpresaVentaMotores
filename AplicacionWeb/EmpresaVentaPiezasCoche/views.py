@@ -671,7 +671,7 @@ def metodopago_busqueda(request):
     return render(request, 'metodopago/metodo_pago_busqueda.html', {'formulario': formulario})
 
 #sesiones
-def registrar_cliente(request):
+def registrar_usuario(request):
     if request.method == 'POST':
         formulario = RegistroForm(request.POST)
         if formulario.is_valid():
@@ -684,7 +684,7 @@ def registrar_cliente(request):
                 cliente = Cliente.objects.create(usuario = user)
                 cliente.save()
                 
-            elif(rol == Usuario.PROVEEDOR):
+            elif(rol == Usuario.EMPLEADO):
                 grupo = Group.objects.get(name='Proveedores')
                 grupo.user_set.add(user)
                 

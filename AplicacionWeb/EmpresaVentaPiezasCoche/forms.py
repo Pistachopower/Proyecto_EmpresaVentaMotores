@@ -406,7 +406,7 @@ class BusquedaPiezaMotorForm(forms.Form):
            
         return cleaned_data
     
-#POR AQUI º 
+
 class BusquedaMetodoPagoForm(forms.Form):
     nombre = forms.CharField(
         required=False,

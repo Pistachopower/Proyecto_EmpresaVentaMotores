@@ -49,5 +49,5 @@ urlpatterns = [
 
 
     #sesiones
-    path('registrar',views.registrar_cliente,name='registrar_cliente'),
+    path('registrar',views.registrar_usuario,name='registrar_usuario'),
 ]
