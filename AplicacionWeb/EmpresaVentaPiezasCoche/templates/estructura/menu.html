@@ -9,12 +9,15 @@
     <!-- Menú principal -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav d-flex align-items-center">
+
+        {% if request.user.is_authenticated %}
         <!-- fecha de sesion -->
         <li class="nav-item text-white">
           Fecha inicio:
           <br />
           {{ request.session.fecha_inicio }}
         </li>
+        {% endif %}
 
         <!-- Inicio -->
         <li class="nav-item">
@@ -26,11 +29,11 @@
           <li class="nav-item text-white">
             Rol:
             <br />
-            {% if request.user.role == 1 %}
+            {% if request.user.rol == 1 %}
               Administrador
-            {% elif request.user.role == 2 %}
+            {% elif request.user.rol == 2 %}
               Empleado
-            {% elif request.user.role == 3 %}
+            {% elif request.user.rol == 3 %}
               Cliente
             {% endif %}
           </li>
@@ -45,6 +48,7 @@
           </li>
         {% endif %}
 
+        {% if request.user.is_authenticated and request.user.rol == 1 %}
         <!-- clientes -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="clientesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Clientes</a>
@@ -108,6 +112,7 @@
             </li>
           </ul>
         </li>
+        {% endif %}
 
         <!-- piezamotor -->
         <li class="nav-item dropdown">
@@ -116,15 +121,20 @@
             <li>
               <a class="dropdown-item" href="{% url 'listar_piezamotor' %}">Lista de piezas de motores</a>
             </li>
+
+            {% if request.user.is_authenticated and request.user.rol == 1 %}
             <li>
               <a class="dropdown-item" href="{% url 'piezamotor_create' %}">Crear pieza</a>
             </li>
+            {% endif %}
+
             <li>
               <a class="dropdown-item" href="{% url 'piezamotor_busqueda' %}">Buscar pieza</a>
             </li>
           </ul>
         </li>
 
+        {% if request.user.is_authenticated and request.user.rol == 1 %}
         <!-- MetodoPago -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="MetodoPagoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Métodos de pago</a>
@@ -141,6 +151,7 @@
           </ul>
         </li>
       </ul>
+      {% endif %}
 
       <!-- Formulario de búsqueda alineado a la derecha -->
       {% if not request.user.is_authenticated %}
