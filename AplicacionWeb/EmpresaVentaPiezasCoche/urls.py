@@ -47,4 +47,7 @@ urlpatterns = [
     path('piezamotor/busqueda-avanzada/', views.piezamotor_busqueda, name='piezamotor_busqueda'),
     path('metodopago/busqueda-avanzada/', views.metodopago_busqueda, name='metodopago_busqueda'),
 
+
+    #sesiones
+    path('registrar',views.registrar_cliente,name='registrar_cliente'),
 ]

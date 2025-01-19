@@ -135,3 +135,5 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 #se agrega esto para la autenticacion de los usuarios
 AUTH_USER_MODEL = 'EmpresaVentaPiezasCoche.Usuario'
+LOGIN_REDIRECT_URL = 'index' #redirecciona a la pagina de inicio despues de loguearse
+LOGOUT_REDIRECT_URL = 'index'

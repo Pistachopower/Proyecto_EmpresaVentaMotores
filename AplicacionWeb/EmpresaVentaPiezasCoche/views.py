@@ -5,6 +5,8 @@ from .forms import *
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 def index(request):
@@ -14,11 +16,6 @@ def index(request):
         request.session["fecha_inicio"] = datetime.now().strftime('%d/%m/%Y %H:%M')
          
     return render(request, 'principal.html')
-
-#borra la sesion
-def borrar_session(request):
-    del request.session['fecha_inicio']
-    return render(request, 'index.html')
 
 #lista de los modelos
 def listar_proveedor(request):
@@ -672,3 +669,28 @@ def metodopago_busqueda(request):
         formulario = BusquedaMetodoPagoForm()
 
     return render(request, 'metodopago/metodo_pago_busqueda.html', {'formulario': formulario})
+
+#sesiones
+def registrar_cliente(request):
+    if request.method == 'POST':
+        formulario = RegistroForm(request.POST)
+        if formulario.is_valid():
+            user = formulario.save()
+            rol = str(formulario.cleaned_data.get('rol'))
+            
+            if(rol == Usuario.CLIENTE):
+                grupo = Group.objects.get(name='Clientes')
+                grupo.user_set.add(user)
+                cliente = Cliente.objects.create(usuario = user)
+                cliente.save()
+                
+            elif(rol == Usuario.PROVEEDOR):
+                grupo = Group.objects.get(name='Proveedores')
+                grupo.user_set.add(user)
+                
+
+            login(request, user)
+            return redirect('index')
+    else:
+        formulario = RegistroForm()
+    return render(request, 'registration/signup.html', {'formulario': formulario})

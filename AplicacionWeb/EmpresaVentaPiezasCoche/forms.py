@@ -6,12 +6,9 @@ from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.forms import UserCreationForm
 
-"""
 class clientesForm(forms.ModelForm):
-
-    
     class Meta:
-        model = Usuario
+        model = Cliente
         fields = ['cliente', 'apellido', 'correo', 'tipo_clientes', 'direccion','empleado']
         help_texts = {
             "cliente": "200 caracteres como máximo",
@@ -41,10 +38,6 @@ class clientesForm(forms.ModelForm):
             self.add_error('correo', 'Por favor, introduce un correo válido.')
         
         return self.cleaned_data
-
-
-
-"""
 
 class proveedorForm(forms.ModelForm):
     class Meta:
@@ -82,7 +75,7 @@ class proveedorForm(forms.ModelForm):
         
         return self.cleaned_data        
   
-"""
+
 class empleadoForm(forms.ModelForm):
     class Meta:
         model = Empleado
@@ -124,7 +117,7 @@ class empleadoForm(forms.ModelForm):
             
         
         return self.cleaned_data   
-"""
+
 
 
 
@@ -459,19 +452,22 @@ class BusquedaMetodoPagoForm(forms.Form):
         return cleaned_data
     
     #Sesiones 
-    """
-    class RegistroForm(UserCreationForm):
+    
+    
+class RegistroForm(UserCreationForm):
     roles = (
-        (Usuario.CLIENTE, 'cliente'),
-        (Usuario.PROVEEDOR, 'proveedor'),
-    )
+            (Usuario.CLIENTE, 'cliente'),
+            (Usuario.EMPLEADO, 'empleado'),
+        )
 
     role = forms.ChoiceField(choices=roles)
-    empresa = forms.CharField(max_length=200, required=False, label="Nombre de la Empresa")
-    rating = forms.FloatField(required=False,label="Calificación Promedia")
+
 
     class Meta:
         model = Usuario
         fields = ('nombre', 'username', 'correo', 'telefono', 'password1', 'password2', 'role')
-    """
     
+
+
+
+

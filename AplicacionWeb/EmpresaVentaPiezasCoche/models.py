@@ -20,6 +20,9 @@ class Usuario(AbstractUser):
    
     rol = models.PositiveSmallIntegerField(choices=ROLES, default=1)
 
+    nombre = models.CharField(max_length=100)
+    telefono = models.CharField(max_length=15, null=True, blank=True)
+    correo = models.EmailField(unique=True, max_length=254)
 
 
 #tablas independientes
