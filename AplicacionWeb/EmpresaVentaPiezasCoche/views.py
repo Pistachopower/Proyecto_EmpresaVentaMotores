@@ -19,9 +19,8 @@ def index(request):
          
     return render(request, 'principal.html')
 
-#lista de los modelos
-#@login_required #para evitar que cualquier persona pueda acceder a la pagina
 
+@permission_required('EmpresaVentaPiezasCoche.listar_proveedor', raise_exception=True)
 def listar_proveedor(request):
     proveedor = Proveedor.objects.all()
 
