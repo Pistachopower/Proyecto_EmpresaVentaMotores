@@ -73,7 +73,7 @@ class MetodoPago(models.Model):
     fecha_ultima_actualizacion = models.DateTimeField(auto_now=True) #se usa este parametro para poder manejar la fecha exacta de que se actualizó algún campo en el modelo MetodoPago
     #nuevo atributo
     pagado = models.CharField(max_length=100) # Valor por defecto si no se proporciona)
-
+ 
     def __str__(self):
         return self.metodo_pago
 
@@ -89,6 +89,10 @@ class Pedido(models.Model):
     
     #related_name='pedido_cliente': se crea una relacion inversa entre cliente y pedido. Tambiens e usa para poder obtener los todos los pedidos de un cliente
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='pedido_cliente')
+
+     #relacion pedido con usuario: Many to one: un usuario puede hacer varios pedidos
+     # pero un pedido solo puede ser de un usuario
+    usuario_Pedido= models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.pedido

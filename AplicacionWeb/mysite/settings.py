@@ -137,3 +137,7 @@ INTERNAL_IPS = ["127.0.0.1"]
 AUTH_USER_MODEL = 'EmpresaVentaPiezasCoche.Usuario'
 LOGIN_REDIRECT_URL = 'index' #redirecciona a la pagina de inicio despues de loguearse
 LOGOUT_REDIRECT_URL = 'index'
+
+# configuración para el envío de correos en la consola. 
+#esto funciona en desarrollo
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

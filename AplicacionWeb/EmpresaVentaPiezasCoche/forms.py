@@ -5,6 +5,7 @@ from datetime import date, datetime
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required, permission_required
 
 class clientesForm(forms.ModelForm):
     class Meta:
@@ -456,16 +457,16 @@ class BusquedaMetodoPagoForm(forms.Form):
     
 class RegistroForm(UserCreationForm):
     roles = (
+            ("", "NINGUNO"),
             (Usuario.CLIENTE, 'cliente'),
             (Usuario.EMPLEADO, 'empleado'),
         )
 
     role = forms.ChoiceField(choices=roles)
 
-
     class Meta:
         model = Usuario
-        fields = ('nombre', 'username', 'correo', 'telefono', 'password1', 'password2', 'role')
+        fields = ('nombre', 'username', 'correo', 'telefono', 'password1', 'password2', 'rol')
     
 
 

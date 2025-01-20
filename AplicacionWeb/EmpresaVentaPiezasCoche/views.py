@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth import login
 
 
 # Create your views here.
@@ -19,7 +20,8 @@ def index(request):
     return render(request, 'principal.html')
 
 #lista de los modelos
-@login_required #para evitar que cualquier persona pueda acceder a la pagina
+#@login_required #para evitar que cualquier persona pueda acceder a la pagina
+
 def listar_proveedor(request):
     proveedor = Proveedor.objects.all()
 
@@ -206,6 +208,7 @@ def piezamotor_create(request):
 
     return render(request, 'piezamotor/piezamotor_form.html', {'form': form})
 
+@permission_required('EmpresaVentaPiezasCoche.metodopago_create', raise_exception=True)
 @login_required
 def metodopago_create(request):
     if request.method == 'POST':

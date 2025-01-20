@@ -10,29 +10,4 @@
     {% bootstrap_button "Enviar" button_type="submit" button_class="btn-primary" %}
 </form>
 
-<script>
-    // Seleccionar los elementos del formulario
-    let role = document.querySelector('select[name="role"]');
-    let empresa = document.querySelector('input[name="empresa"]').parentElement;
-    let rating = document.querySelector('input[name="rating"]').parentElement; 
-
-    // Función para mostrar/ocultar campos
-    function mostrar() {
-        if (role.value == '3') {  // '3' es el valor para "Proveedor"
-            empresa.style.display = 'block'; // Mostrar el campo empresa
-            rating.style.display = 'block'; // Mostrar el campo rating
-        } else {
-            empresa.style.display = 'none'; // Ocultar el campo empresa
-            rating.style.display = 'none'; // Ocultar el campo rating
-        }
-    }
-
-    // Ocultar inicialmente
-    mostrar();
-
-    // Agregar evento para cambiar campos al cambiar el rol
-    role.addEventListener('change', mostrar);
-</script>
-
-
 {% endblock %}
