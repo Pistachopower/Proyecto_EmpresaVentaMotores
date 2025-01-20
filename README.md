@@ -135,3 +135,15 @@ Método de Pago:
     if fecha_ultima_actualizacion:
         metodos_pago = metodos_pago.filter(fecha_ultima_actualizacion__date=fecha_ultima_actualizacion)
         mensaje_busqueda += f"Fecha de última actualización: {fecha_ultima_actualizacion}\n"
+
+Funcionalidades del Menú
+Administrador: todas las funcionalidades
+
+Empleado: todas las acciones, excepto ver los datos de las nominas 
+
+usuario: ver y buscar motores
+
+
+
+
+
