@@ -3,8 +3,40 @@ from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser #agregamos estos para la autenticacion
+
+
+class Usuario(AbstractUser):
+    #clave-valor: 
+    #abajo están los usuarios que vamos a crear
+    ADMINISTRADOR = 1
+    EMPLEADO = 2
+    CLIENTE = 3
+    ROLES = [
+        (ADMINISTRADOR, 'administrador'),
+        (EMPLEADO, 'empleado'),
+        (CLIENTE, 'cliente'),
+    ]
+   
+    rol = models.PositiveSmallIntegerField(choices=ROLES, default=1)
+
+    nombre = models.CharField(max_length=100)
+    telefono = models.CharField(max_length=15, null=True, blank=True)
+    correo = models.EmailField(unique=True, max_length=254)
+
 
 #tablas independientes
+#empleado hereda de usuario
+class Empleado(models.Model):
+    empleadoUsuario= models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    empleado = models.CharField(max_length=100)
+    apellido = models.TextField()
+    cargo = models.CharField(max_length=100)
+    fecha_contratacion = models.DateField(null=True, blank=True) #Fecha de contratación 
+
+    def __str__(self):
+        return f"{self.empleado} {self.apellido}" 
+
 class Proveedor(models.Model):
     proveedor = models.CharField(max_length=100) #los id se ponen a 100 porque puede incrementar los registros
     telefono = models.TextField()
@@ -13,19 +45,10 @@ class Proveedor(models.Model):
 
     def __str__(self):
         return self.proveedor
-
-
-class Empleado(models.Model):
-    empleado = models.CharField(max_length=100)
-    apellido = models.TextField()
-    cargo = models.CharField(max_length=100)
-    fecha_contratacion = models.DateField(null=True, blank=True) #Fecha de contratación 
-
-    def __str__(self):
-        return f"{self.empleado} {self.apellido}"
-
-
+    
+#cliente hereda de usuario
 class Cliente(models.Model):
+    clienteUsuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='clienteUsuario')
     TIPO_CLIENTES = [('P', 'Particular'), ('E', 'Empresa')]
     cliente = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
@@ -36,6 +59,7 @@ class Cliente(models.Model):
 
     def __str__(self):
         return f"{self.cliente} {self.apellido}"
+
 
 
 class MetodoPago(models.Model):
@@ -49,7 +73,7 @@ class MetodoPago(models.Model):
     fecha_ultima_actualizacion = models.DateTimeField(auto_now=True) #se usa este parametro para poder manejar la fecha exacta de que se actualizó algún campo en el modelo MetodoPago
     #nuevo atributo
     pagado = models.CharField(max_length=100) # Valor por defecto si no se proporciona)
-
+ 
     def __str__(self):
         return self.metodo_pago
 
@@ -65,6 +89,10 @@ class Pedido(models.Model):
     
     #related_name='pedido_cliente': se crea una relacion inversa entre cliente y pedido. Tambiens e usa para poder obtener los todos los pedidos de un cliente
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='pedido_cliente')
+
+     #relacion pedido con usuario: Many to one: un usuario puede hacer varios pedidos
+     # pero un pedido solo puede ser de un usuario
+    usuario_Pedido= models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.pedido
@@ -87,4 +115,14 @@ class PiezaMotor_Pedido(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
     cantidad = models.IntegerField(null=True, blank=True) #se pone estos parametros para evitar el el error que no pueda ser nulo el valor
     precioTotal = models.FloatField(default=0.0) #se agrega este parametros para evitar error: Internal error: NOT NULL constraint failed
+
+
+
+
+
+
+
+
+
+
 

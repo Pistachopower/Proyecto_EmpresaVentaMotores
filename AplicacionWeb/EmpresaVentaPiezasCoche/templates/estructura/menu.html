@@ -1,100 +1,197 @@
-{% load django_bootstrap5 %}
-{% load static %}
+  {% load django_bootstrap5 %}
+  {% load static %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <!-- Título de la barra de navegación -->
-        <a class="navbar-brand" href="{% url 'index' %}">MotorPartExpress</a>
-        
-        <!-- Menú principal -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <!-- Inicio -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">Inicio</a>
-                </li>
+      <!-- Título de la barra de navegación -->
+      <a class="navbar-brand" href="{% url 'index' %}">MotorPartExpress</a>
 
-                <!-- clientes -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="clientesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Clientes
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="clientesDropdown">
-                        <li><a class="dropdown-item" href="{% url 'listar_clientes' %}">Lista de clientes</a></li>
-                        <li><a class="dropdown-item" href="{% url 'clientes_create' %}">Crear cliente</a></li>
-                        <li><a class="dropdown-item" href="{% url 'clientes_busqueda' %}">Buscar cliente</a></li>         
-                    </ul>
-                </li>
+      <!-- Menú principal -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav d-flex align-items-center">
 
-                <!-- proveedores -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="proveedoresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Proveedores
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="proveedoresDropdown">
-                        <li><a class="dropdown-item" href="{% url 'listar_proveedor' %}">Lista de Proveedores</a></li>
-                        <li><a class="dropdown-item" href="{% url 'proveedor_create' %}">Crear Proveedores</a></li>
-                        <li><a class="dropdown-item" href="{% url 'proveedor_busqueda' %}">Buscar Proveedores</a></li> 
-                    </ul>
-                </li>
+          {% if request.user.is_authenticated %}
+          <!-- fecha de sesion -->
+          <li class="nav-item text-white">
+            Fecha inicio:
+            <br />
+            {{ request.session.fecha_inicio }}
+          </li>
+          {% endif %}
 
-                <!-- empleados -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="empleadosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Empleados
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="empleadosDropdown">
-                        <li><a class="dropdown-item" href="{% url 'listar_empleado' %}">Lista de empleados</a></li>
-                        <li><a class="dropdown-item" href="{% url 'empleado_create' %}">Crear Empleados</a></li>
-                        <li><a class="dropdown-item" href="{% url 'empleado_busqueda' %}">Buscar Empleados</a></li>
-                    </ul>
-                </li>
+          <!-- Inicio -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'index' %}">Inicio</a>
+          </li>
 
+          <!-- Mostramos el rol del usuario -->
+          {% if request.user.is_authenticated %}
+            <li class="nav-item text-white">
+              Rol:
+              <br />
+              {% if request.user.rol == 1 %}
+                Administrador
+              {% elif request.user.rol == 2 %}
+                Empleado
+              {% elif request.user.rol == 3 %}
+                Cliente
+              {% endif %}
+            </li>
+          {% endif %}
 
-                <!-- pedidos -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="pedidosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Pedidos
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="pedidosDropdown">
-                        <li><a class="dropdown-item" href="{% url 'listar_pedido' %}">Lista de pedidos</a></li>
-                        <li><a class="dropdown-item" href="{% url 'pedido_create' %}">Crear pedido</a></li>
-                        <li><a class="dropdown-item" href="{% url 'pedido_busqueda' %}">Buscar pedido</a></li>
-                    </ul>
-                </li>
+          <!-- Mostramos el nombre del usuario que está activo -->
+          {% if request.user.is_authenticated %}
+            <li class="nav-item text-white">
+              Usuario:
+              <br />
+              {{ request.user.username }}
+            </li>
+          {% endif %}
 
-
-                <!-- piezamotor -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="piezamotorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Piezas de motores
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="piezamotorDropdown">
-                        <li><a class="dropdown-item" href="{% url 'listar_piezamotor' %}">Lista de piezas de motores</a></li>
-                        <li><a class="dropdown-item" href="{% url 'piezamotor_create' %}">Crear pieza</a></li>
-                        <li><a class="dropdown-item" href="{% url 'piezamotor_busqueda' %}">Buscar pieza</a></li>
-                    </ul>
-                </li>
-
-                <!-- MetodoPago -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="MetodoPagoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Métodos de pago
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="MetodoPagoDropdown">
-                        <li><a class="dropdown-item" href="{% url 'listar_metodopago' %}">Lista de métodos de pago</a></li>
-                        <li><a class="dropdown-item" href="{% url 'metodopago_create' %}">Crear MetodoPago</a></li>
-                        <li><a class="dropdown-item" href="{% url 'metodopago_busqueda' %}">Buscar MetodoPago</a></li>
-                    </ul>
-                </li>
-                
+          {% if request.user.is_authenticated %}
+          {% if request.user.rol == 1 or request.user.rol == 2 %}
+          <!-- clientes -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="clientesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Clientes</a>
+            <ul class="dropdown-menu" aria-labelledby="clientesDropdown">
+              <li>
+                <a class="dropdown-item" href="{% url 'listar_clientes' %}">Lista de clientes</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'clientes_create' %}">Crear cliente</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'clientes_busqueda' %}">Buscar cliente</a>
+              </li>
             </ul>
+          </li>
 
-            <!-- Formulario de búsqueda alineado a la derecha -->
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Buscar</button>
+          <!-- proveedores -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="proveedoresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Proveedores</a>
+            <ul class="dropdown-menu" aria-labelledby="proveedoresDropdown">
+              <li>
+                <a class="dropdown-item" href="{% url 'listar_proveedor' %}">Lista de Proveedores</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'proveedor_create' %}">Crear Proveedores</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'proveedor_busqueda' %}">Buscar Proveedores</a>
+              </li>
+            </ul>
+          </li>
+          {% endif %}
+          {% endif %}
+
+          {% if request.user.is_authenticated and request.user.rol == 1 %}
+          <!-- empleados -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="empleadosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Empleados</a>
+            <ul class="dropdown-menu" aria-labelledby="empleadosDropdown">
+              <li>
+                <a class="dropdown-item" href="{% url 'listar_empleado' %}">Lista de empleados</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'empleado_create' %}">Crear Empleados</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'empleado_busqueda' %}">Buscar Empleados</a>
+              </li>
+            </ul>
+          </li>
+          {% endif %}
+
+          <!-- pedidos -->
+          {% if request.user.is_authenticated %}
+          {% if request.user.rol == 1 or request.user.rol == 2 %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="pedidosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pedidos</a>
+            <ul class="dropdown-menu" aria-labelledby="pedidosDropdown">
+              <li>
+                <a class="dropdown-item" href="{% url 'listar_pedido' %}">Lista de pedidos</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'pedido_create' %}">Crear pedido</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'pedido_busqueda' %}">Buscar pedido</a>
+              </li>
+            </ul>
+          </li>
+          {% endif %}
+          {% endif %}
+
+          <!-- piezamotor -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="piezamotorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Piezas de motores</a>
+            <ul class="dropdown-menu" aria-labelledby="piezamotorDropdown">
+              <li>
+                <a class="dropdown-item" href="{% url 'listar_piezamotor' %}">Lista de piezas de motores</a>
+              </li>
+
+              {% if request.user.is_authenticated %}
+              {% if request.user.rol == 1 or request.user.rol == 2 %} 
+              <li>
+                <a class="dropdown-item" href="{% url 'piezamotor_create' %}">Crear pieza</a>
+              </li>
+              {% endif %}
+              {% endif %}
+
+              <li>
+                <a class="dropdown-item" href="{% url 'piezamotor_busqueda' %}">Buscar pieza</a>
+              </li>
+            </ul>
+          </li>
+
+          {% if request.user.is_authenticated %}
+          {% if request.user.rol == 1 or request.user.rol == 2 %} 
+          <!-- MetodoPago -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="MetodoPagoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Métodos de pago</a>
+            <ul class="dropdown-menu" aria-labelledby="MetodoPagoDropdown">
+              <li>
+                <a class="dropdown-item" href="{% url 'listar_metodopago' %}">Lista de métodos de pago</a>
+              </li>
+
+              <li>
+                <a class="dropdown-item" href="{% url 'metodopago_create' %}">Crear MetodoPago</a>
+              </li>
+  
+              <li>
+                <a class="dropdown-item" href="{% url 'metodopago_busqueda' %}">Buscar MetodoPago</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        {% endif %}
+        {% endif %}
+
+        <!-- Formulario de búsqueda alineado a la derecha -->
+        {% if not request.user.is_authenticated %}
+          <form class="d-flex ms-auto" role="search">
+            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" />
+            <button class="btn btn-outline-warning btn-sm me-2" type="submit">Buscar</button>
+          </form>
+        {% endif %}
+
+        <!-- Menu para saber cuando esta logueado o no -->
+        <div class="ms-auto d-flex align-items-center">
+          {% if not request.user.is_authenticated %}
+            <a class="btn btn-outline-warning" href="{% url 'login' %}">Login</a>
+          {% endif %}
+
+          {% if not request.user.is_authenticated %}
+            <a class="btn btn-outline-warning ms-1" href="{% url 'registrar_usuario' %}">Registrarse</a>
+          {% endif %}
+
+          {% if request.user.is_authenticated %}
+            <form action="{% url 'logout' %}" class="d-flex m-3" role="search" method="POST">
+              {% csrf_token %}
+              <button class="btn btn-light btn-outline-dark" type="submit">Desconectarse</button>
             </form>
+          {% endif %}
         </div>
+      </div>
     </div>
-</nav>
+  </nav>

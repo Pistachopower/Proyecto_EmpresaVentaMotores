@@ -1,14 +1,13 @@
 
 from django import forms
-from .models import Proveedor, Empleado, Cliente, MetodoPago, Pedido, PiezaMotor, PiezaMotor_Pedido
+from .models import *
 from datetime import date, datetime
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required, permission_required
 
 class clientesForm(forms.ModelForm):
-
-    
     class Meta:
         model = Cliente
         fields = ['cliente', 'apellido', 'correo', 'tipo_clientes', 'direccion','empleado']
@@ -40,8 +39,6 @@ class clientesForm(forms.ModelForm):
             self.add_error('correo', 'Por favor, introduce un correo válido.')
         
         return self.cleaned_data
-
-
 
 class proveedorForm(forms.ModelForm):
     class Meta:
@@ -121,6 +118,8 @@ class empleadoForm(forms.ModelForm):
             
         
         return self.cleaned_data   
+
+
 
 
 
@@ -408,6 +407,7 @@ class BusquedaPiezaMotorForm(forms.Form):
            
         return cleaned_data
     
+
 class BusquedaMetodoPagoForm(forms.Form):
     nombre = forms.CharField(
         required=False,
@@ -451,3 +451,24 @@ class BusquedaMetodoPagoForm(forms.Form):
             raise forms.ValidationError("Debe proporcionar al menos un campo para realizar la búsqueda.")
 
         return cleaned_data
+    
+    #Sesiones 
+    
+    
+class RegistroForm(UserCreationForm):
+    roles = (
+            ("", "NINGUNO"),
+            (Usuario.CLIENTE, 'cliente'),
+            (Usuario.EMPLEADO, 'empleado'),
+        )
+
+    role = forms.ChoiceField(choices=roles)
+
+    class Meta:
+        model = Usuario
+        fields = ('nombre', 'username', 'correo', 'telefono', 'password1', 'password2', 'rol')
+    
+
+
+
+
