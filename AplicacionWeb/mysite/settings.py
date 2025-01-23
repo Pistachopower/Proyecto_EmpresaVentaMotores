@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_bootstrap5',
     'django_bootstrap_icons',
-    'rest_framework'
+    'rest_framework',
+    'oauth2_provider',
 
 ]
 
@@ -142,3 +143,20 @@ LOGOUT_REDIRECT_URL = 'index'
 # configuración para el envío de correos en la consola. 
 #esto funciona en desarrollo
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+OAUTH2_PROVIDER = {
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Acceso a los grupos'}
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
+
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+

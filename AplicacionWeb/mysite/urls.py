@@ -22,7 +22,10 @@ urlpatterns = [
     path('', include('EmpresaVentaPiezasCoche.urls')),
     path("__debug__/", include("debug_toolbar.urls")),
     path('accounts/', include('django.contrib.auth.urls')), #Django incluye las URLs de autenticación prediseñadas de Django en la URL
-    path('api/v1/',include("EmpresaVentaPiezasCoche.api_urls")),
+    path('api/v1/', include("EmpresaVentaPiezasCoche.api_urls")),  # Asegúrate de que esta línea esté correcta
+    #path('api/v2/',include("EmpresaVentaPiezasCoche.api_urls_v2")),
+    path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    
 ]
 
 #handler404 = 'EmpresaVentaPiezasCoche.views.error_404_view'
