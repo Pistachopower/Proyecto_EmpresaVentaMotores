@@ -5,3 +5,4 @@ django-debug-toolbar~=4.4.6
 django-bootstrap5~=24.3
 django-bootstrap-icons~=0.8.6
 django-environ~=0.11.2
+djangorestframework~=3.14.0
