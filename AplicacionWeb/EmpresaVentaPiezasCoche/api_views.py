@@ -9,5 +9,11 @@ from .forms import *
 @api_view(['GET'])
 def listar_usuarios(request):
     usuarios = Usuario.objects.all()
-    serializer= UsuarioSerializer(usuarios, many=True)
+    serializer= UsuarioSerializer(usuarios, many=True) #parámetro many=True, para indicar que serializamos muchos valores
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def listar_empleados(request):
+    empleados = Empleado.objects.all()
+    serializer= EmpleadoSerializer(empleados, many=True)
     return Response(serializer.data)
