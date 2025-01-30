@@ -27,6 +27,8 @@ class EmpleadoSerializer(serializers.ModelSerializer):
     # Incluye información del Usuario relacionado
     empleadoUsuario = UsuarioSerializer()  
 
+    #Para formatear Fechas
+    fecha_contratacion = serializers.DateField(format=('%d-%m-%Y'))
 
     class Meta: #hace referencia al modelo y sus atributos
         model = Empleado
