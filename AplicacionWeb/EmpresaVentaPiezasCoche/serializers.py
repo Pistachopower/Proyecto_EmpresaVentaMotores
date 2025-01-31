@@ -24,12 +24,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
 # Serializer para Empleado
 class EmpleadoSerializer(serializers.ModelSerializer):
-    # Incluye información del Usuario relacionado
-    empleadoUsuario = UsuarioSerializer()  
-
-    #Para formatear Fechas
-    fecha_contratacion = serializers.DateField(format=('%d-%m-%Y'))
-
     class Meta: #hace referencia al modelo y sus atributos
         model = Empleado
         fields = (
@@ -40,6 +34,21 @@ class EmpleadoSerializer(serializers.ModelSerializer):
             'cargo', 
             'fecha_contratacion',
         )
+
+#mejorado
+class EmpleadoSerializerMejorado(serializers.ModelSerializer):
+    # Incluye información del Usuario relacionado
+    empleadoUsuario = UsuarioSerializer()  
+
+    #Para formatear Fechas
+    fecha_contratacion = serializers.DateField(format=('%d-%m-%Y'))
+
+    class Meta: #hace referencia al modelo y sus atributos
+        model = Empleado
+        fields = (
+            '__all__'
+        )
+
 
 # Serializer para Proveedor
 class ProveedorSerializer(serializers.ModelSerializer):
