@@ -145,5 +145,17 @@ usuario: ver y buscar motores
 
 
 
+|    Tipo de Usuario   |   Nombre de Usuario  |   Contraseña   |
+|----------------------|----------------------|----------------|
+|   **Administrador**  |        nelson        |     123456     |
+|     **Empleado**     |     sasha_11         |  dcdcd568455   |
+|     **Cliente**      |     nefertiti_10     |  cjsnvcs5457   |
+
+
+
+
+
+
+
 
 
