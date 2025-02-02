@@ -23,3 +23,15 @@ def listar_empleados_mejorado(request):
     empleados = Empleado.objects.all()
     serializer= EmpleadoSerializerMejorado(empleados, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def listar_clientes_mejorado(request):
+    clientes = Cliente.objects.all()
+    serializer= ClienteSerializerMejorado(clientes, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def listar_pedido_mejorado(request):
+    pedido = Pedido.objects.all()
+    serializer= PedidoSerializer_Mejorado(pedido, many=True)
+    return Response(serializer.data)
