@@ -62,13 +62,17 @@ INSTALLED_APPS = [
 
 #este es para la autenticacion de token
 OAUTH2_PROVIDER = {
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Acceso a los grupos'}
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 
+               'groups': 'Acceso a los grupos',},
+    
+    "ACCESS_TOKEN_EXPIRE_SECONDS": 5000000000,
 }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
         
     ),
     

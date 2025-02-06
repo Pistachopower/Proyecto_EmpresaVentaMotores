@@ -469,6 +469,34 @@ class RegistroForm(UserCreationForm):
         fields = ('nombre', 'username', 'correo', 'telefono', 'password1', 'password2', 'rol')
     
 
+#Busqueda simple y avanzada
+class BusquedaEmpleadoForm(forms.Form):
+    # Campos de búsqueda
+    apellido= forms.CharField(required=False, label="Apellido")
+    cargo= forms.CharField(required=False, label="Cargo")
+    fecha_contratacion= forms.DateField(required=False, label="Fecha de contratación")
+    
+    def clean(self):
+        cleaned_data = super().clean()
 
+        apellido = cleaned_data.get('apellido')
+        cargo = cleaned_data.get('cargo')
+        fecha_contratacion = cleaned_data.get('fecha_contratacion')
+        
+        if (not apellido and not cargo and fecha_contratacion):
+            self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
 
-
+        if (apellido and len(apellido) < 3):
+            self.add_error('apellido', 'El apellido debe tener al menos 3 caracteres')
+            
+        if (cargo and len(cargo) < 3):
+            self.add_error('cargo', 'El cargo debe tener al menos 3 caracteres')
+            
+        if (fecha_contratacion and fecha_contratacion > timezone.now().date()):
+            self.add_error('fecha_contratacion', 'La fecha de contratación no puede ser mayor a hoy')
+            
+        return cleaned_data
+            
+        
+        
+        
