@@ -45,7 +45,11 @@ class EmpleadoSerializerMejorado(serializers.ModelSerializer):
     class Meta: #hace referencia al modelo y sus atributos
         model = Empleado
         fields = (
-            '__all__'
+            'empleadoUsuario',
+            'empleado',
+            'apellido',
+            'cargo',
+            'fecha_contratacion',
         )
 
 

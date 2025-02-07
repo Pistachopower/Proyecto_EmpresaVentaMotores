@@ -15,4 +15,6 @@ urlpatterns= [
     #Busqueda
     #Para hacer peticiones a la api usar la url 
     path('busquedasimpleempleados',busquedaSimpleEmpleado,name='busquedaSimpleEmpleado'),
+    
+    path('busqueda-avanzada-empleados',busquedaAvanzadaEmpleado,name='busquedaAvanzadaEmpleado'),
 ]

@@ -496,6 +496,42 @@ class BusquedaEmpleadoForm(forms.Form):
             self.add_error('fecha_contratacion', 'La fecha de contratación no puede ser mayor a hoy')
             
         return cleaned_data
+    
+    
+class BusquedaEmpleadoForm(forms.Form):
+    # Campos de búsqueda
+    empleado= forms.CharField(required=False, label="Nombre")
+    apellido = forms.CharField(required=False, label="Apellido")
+    cargo = forms.CharField(required=False, label="Cargo")
+    fecha_contratacion = forms.DateField(required=False, label="Fecha de contratación",  widget=forms.DateInput(attrs={'type': 'date'}))
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Obtenemos los valores del formulario
+        empleado = cleaned_data.get('empleado')
+        apellido = cleaned_data.get('apellido')
+        cargo = cleaned_data.get('cargo')
+        fecha_contratacion = cleaned_data.get('fecha_contratacion')
+        
+        if (not empleado and not apellido and not cargo and not fecha_contratacion):
+            self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
+        
+        if (not apellido and not cargo and not fecha_contratacion):
+            self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
+
+        if (apellido and len(apellido) < 3):
+            self.add_error('apellido', 'El apellido debe tener al menos 3 caracteres')
+            
+        if (cargo and len(cargo) < 3):
+            self.add_error('cargo', 'El cargo debe tener al menos 3 caracteres')
+            
+        if (fecha_contratacion and fecha_contratacion > timezone.now().date()):
+            self.add_error('fecha_contratacion', 'La fecha de contratación no puede ser mayor a hoy')
+            
+        return cleaned_data
+    
+            
             
         
         
