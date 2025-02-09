@@ -7,6 +7,7 @@ from .forms import *
 from django.db.models import Q
 
 
+
 @api_view(['GET'])
 def listar_usuarios(request):
     usuarios = Usuario.objects.all()
@@ -67,7 +68,7 @@ def busquedaSimpleEmpleado(request):
 def busquedaAvanzadaEmpleado(request):
     # Si hay parámetros en la query
     if len(request.query_params) > 0:
-        formulario = BusquedaEmpleadoForm(request.query_params)
+        formulario = BusquedaEmpleadoFormAvanzado(request.query_params)
         
         if formulario.is_valid():
             # Obtener los datos del formulario

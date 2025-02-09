@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, permission_required
-import re
+
 
 class clientesForm(forms.ModelForm):
     class Meta:
@@ -499,7 +499,7 @@ class BusquedaEmpleadoForm(forms.Form):
         return cleaned_data
     
     
-class BusquedaEmpleadoForm(forms.Form):
+class BusquedaEmpleadoFormAvanzado(forms.Form):
     # Campos de búsqueda
     empleado= forms.CharField(required=False, label="Nombre")
     apellido = forms.CharField(required=False, label="Apellido")
@@ -603,8 +603,6 @@ class BusquedaAvanzadaProveedorForm(forms.Form):
         telefono = cleaned_data.get('telefono')
         correo = cleaned_data.get('correo')
         
-        #para validar el correo
-        patron = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
         if (not proveedor and not telefono and not correo):
             self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
@@ -612,7 +610,7 @@ class BusquedaAvanzadaProveedorForm(forms.Form):
         if (proveedor and len(proveedor) < 3):
             self.add_error('proveedor', 'El nombre del pedido debe tener al menos 3 caracteres')
             
-        if (correo and len(correo) < 3) and re.match(patron, correo):
+        if (correo and len(correo) < 3):
             self.add_error('correo', 'El correo del proveedor debe tener al menos 3 caracteres o puede que no sea válido')
                             
         return cleaned_data
