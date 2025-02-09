@@ -547,13 +547,13 @@ class BusquedaAvanzadaClientesForm(forms.Form):
         cliente = cleaned_data.get('cliente')
         apellido = cleaned_data.get('apellido')
         tipo_clientes = cleaned_data.get('tipo_clientes')
+        
+        if (not cliente and not apellido and not tipo_clientes):
+            self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
 
         if (tipo_clientes and tipo_clientes not in ['P', 'E']):
             self.add_error('tipo_clientes', 'El tipo de cliente debe ser "P" o "E"')
-        
-        if (not cliente and not apellido):
-            self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
-            
+                    
         if (cliente and len(cliente) < 3):
             self.add_error('cliente', 'El nombre del cliente debe tener al menos 3 caracteres')
         

@@ -131,7 +131,7 @@ def busquedaAvanzadaClientes(request):
             
             
             # Si todos los campos están vacíos, devolvemos un error
-            if not cliente and not apellido:
+            if not cliente and not apellido  and not tipo_clientes:
                 return Response({"error": "Debe proporcionar al menos un parámetro de búsqueda."}, status=status.HTTP_400_BAD_REQUEST)
             
             #hacemos la queryset para buscar los empleados
