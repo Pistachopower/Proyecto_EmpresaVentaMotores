@@ -14,7 +14,11 @@ urlpatterns= [
     
     #Busqueda
     #Para hacer peticiones a la api usar la url 
-    path('busquedasimpleempleados',busquedaSimpleEmpleado,name='busquedaSimpleEmpleado'),
+    path('busquedasimpleempleados/',busquedaSimpleEmpleado,name='busquedaSimpleEmpleado'),
     
-    path('busqueda-avanzada-empleados',busquedaAvanzadaEmpleado,name='busquedaAvanzadaEmpleado'),
+    path('busqueda-avanzada-empleados/',busquedaAvanzadaEmpleado,name='busquedaAvanzadaEmpleado'),
+    path('busqueda-avanzada-clientes/',busquedaAvanzadaClientes,name='busquedaAvanzadaClientes'),
+    path('busqueda-avanzada-pedidos/',busquedaAvanzadaPedidos,name='busquedaAvanzadaPedidos'),
+    path('busqueda-avanzada-proveedor/',busquedaAvanzadaProveedor,name='busquedaAvanzadaProveedor'),
+
 ]

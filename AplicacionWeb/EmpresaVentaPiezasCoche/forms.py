@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, permission_required
+import re
 
 class clientesForm(forms.ModelForm):
     class Meta:
@@ -516,9 +517,10 @@ class BusquedaEmpleadoForm(forms.Form):
         
         if (not empleado and not apellido and not cargo and not fecha_contratacion):
             self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
+            
+        if (empleado and len(empleado) < 3):
+            self.add_error('empleado', 'El nombre del empleado debe tener al menos 3 caracteres')
         
-        if (not apellido and not cargo and not fecha_contratacion):
-            self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
 
         if (apellido and len(apellido) < 3):
             self.add_error('apellido', 'El apellido debe tener al menos 3 caracteres')
@@ -531,7 +533,90 @@ class BusquedaEmpleadoForm(forms.Form):
             
         return cleaned_data
     
+    
+class BusquedaAvanzadaClientesForm(forms.Form):
+    # Campos de búsqueda
+    cliente = forms.CharField(required=False, label="Nombre del cliente")
+    apellido = forms.CharField(required=False, label="Apellido del cliente")
+    tipo_clientes = forms.CharField(required=False, label="tipo_clientes")
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Obtenemos los valores del formulario
+        cliente = cleaned_data.get('cliente')
+        apellido = cleaned_data.get('apellido')
+        tipo_clientes = cleaned_data.get('tipo_clientes')
+
+        if (tipo_clientes and tipo_clientes not in ['P', 'E']):
+            self.add_error('tipo_clientes', 'El tipo de cliente debe ser "P" o "E"')
+        
+        if (not cliente and not apellido):
+            self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
             
+        if (cliente and len(cliente) < 3):
+            self.add_error('cliente', 'El nombre del cliente debe tener al menos 3 caracteres')
+        
+
+        if (apellido and len(apellido) < 3):
+            self.add_error('apellido', 'El apellido debe tener al menos 3 caracteres')
+                
+        return cleaned_data
+    
+class BusquedaAvanzadaPedidoForm(forms.Form):
+    # Campos de búsqueda
+    pedido = forms.CharField(required=False, label="Nombre del pedido")
+    fecha_pedido = forms.CharField(required=False, label="Fecha del pedido")
+    metodo_pago = forms.CharField(required=False, label="Método de pago")
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Obtenemos los valores del formulario
+        pedido = cleaned_data.get('pedido')
+        fecha_pedido = cleaned_data.get('fecha_pedido')
+        metodo_pago = cleaned_data.get('metodo_pago')
+
+        if (not pedido and not fecha_pedido and not metodo_pago):
+            self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
+            
+        if (pedido and len(pedido) < 3):
+            self.add_error('pedido', 'El nombre del pedido debe tener al menos 3 caracteres')
+            
+        if (fecha_pedido and len(fecha_pedido) < 3):
+            self.add_error('fecha_pedido', 'La fecha del pedido debe tener al menos 3 caracteres')
+                            
+        return cleaned_data
+    
+    
+class BusquedaAvanzadaProveedorForm(forms.Form):
+    # Campos de búsqueda
+    proveedor = forms.CharField(required=False, label="Nombre del proveedor")
+    telefono = forms.CharField(required=False, label="telefono del proveedor")
+    correo = forms.CharField(required=False, label="correo del proveedor")
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Obtenemos los valores del formulario
+        proveedor = cleaned_data.get('proveedor')
+        telefono = cleaned_data.get('telefono')
+        correo = cleaned_data.get('correo')
+        
+        #para validar el correo
+        patron = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+
+        if (not proveedor and not telefono and not correo):
+            self.add_error(None, 'Debe introducir al menos un valor en un campo del formulario')
+            
+        if (proveedor and len(proveedor) < 3):
+            self.add_error('proveedor', 'El nombre del pedido debe tener al menos 3 caracteres')
+            
+        if (correo and len(correo) < 3) and re.match(patron, correo):
+            self.add_error('correo', 'El correo del proveedor debe tener al menos 3 caracteres o puede que no sea válido')
+                            
+        return cleaned_data
+    
             
         
         
