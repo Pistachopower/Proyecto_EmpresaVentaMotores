@@ -44,24 +44,23 @@ def busquedaSimpleEmpleado(request):
     #request.query_params: hace referencia de los parametros que vienen del cliente. ejemplo: busquedasimpleempleados/?textoBusqueda=HOLA
     formulario= BusquedaEmpleadoForm(request.query_params)
     
-    if formulario.is_valid():
+
         #aqui lo que hacemos es obtener el valor que viene del cliente. ejemplo: textoBusqueda: HOLA
-        texto = formulario.data.get('textoBusqueda')
+    texto = formulario.data.get('textoBusqueda')
         
-        empleado= Empleado.objects.all()
-        empleado= empleado.filter(
+    empleado= Empleado.objects.filter(
             
             Q(apellido__icontains=texto) |
             Q(cargo__icontains=texto) 
             )
+
         
         #convertimos el objeto a json
-        serializer= EmpleadoSerializerMejorado(empleado, many=True)
+    serializer= EmpleadoSerializerMejorado(empleado, many=True)
         
         #enviamos los datos
-        return Response(serializer.data)
-    else:
-        return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.data)
+
     
     
 @api_view(['GET'])
@@ -82,24 +81,24 @@ def busquedaAvanzadaEmpleado(request):
                 return Response({"error": "Debe proporcionar al menos un parámetro de búsqueda."}, status=status.HTTP_400_BAD_REQUEST)
             
             #hacemos la queryset para buscar los empleados
-            QS_Empleado = Empleado.objects.all()
+            QS_Empleado = Empleado.objects.select_related('empleadoUsuario')
             
             # Filtramos por cada campo si se proporcionó
             if empleado:
                 QS_Empleado = QS_Empleado.filter(empleado__icontains=empleado)
-                print(QS_Empleado.query)
+                
                 
             if apellido:
                 QS_Empleado = QS_Empleado.filter(apellido__icontains=apellido)
-                print(QS_Empleado.query)
+                
                 
             if cargo:
                 QS_Empleado = QS_Empleado.filter(cargo__icontains=cargo)
-                print(QS_Empleado.query)
+               
                 
             if fecha_contratacion:
                 QS_Empleado = QS_Empleado.filter(fecha_contratacion=fecha_contratacion)
-                print(QS_Empleado.query)
+                
             # Convertimos la queryset en un objeto serializado
             serializer = EmpleadoSerializerMejorado(QS_Empleado, many=True)
 
@@ -136,7 +135,7 @@ def busquedaAvanzadaClientes(request):
                 return Response({"error": "Debe proporcionar al menos un parámetro de búsqueda."}, status=status.HTTP_400_BAD_REQUEST)
             
             #hacemos la queryset para buscar los empleados
-            QS_Cliente = Cliente.objects.all()
+            QS_Cliente = Cliente.objects.select_related('empleado','clienteUsuario')
             
             # Filtramos por cada campo si se proporcionó
             if cliente:
@@ -186,23 +185,21 @@ def busquedaAvanzadaPedidos(request):
                 return Response({"error": "Debe proporcionar al menos un parámetro de búsqueda."}, status=status.HTTP_400_BAD_REQUEST)
             
             #hacemos la queryset para buscar los empleados
-            QS_Pedido = Pedido.objects.all()
-            print(QS_Pedido)
+            QS_Pedido = Pedido.objects.select_related('cliente','usuario_Pedido')
             
             # Filtramos por cada campo si se proporcionó
             if pedido:
                 QS_Pedido = QS_Pedido.filter(pedido__icontains=pedido)
-                print(QS_Pedido)
-                
-                
+
+                         
             if fecha_pedido:
                 QS_Pedido = QS_Pedido.filter(fecha_pedido__icontains=fecha_pedido)
-                print(QS_Pedido)
+
                 
                  
             if metodo_pago:
                 QS_Pedido = QS_Pedido.filter(metodo_pago__metodo_pago__icontains=metodo_pago)
-                print(QS_Pedido)
+                
                 
 
             # Convertimos la queryset en un objeto serializado
@@ -241,22 +238,22 @@ def busquedaAvanzadaProveedor(request):
             
             #hacemos la queryset para buscar los empleados
             QS_Proveedor = Proveedor.objects.all()
-            print(QS_Proveedor)
+   
             
             # Filtramos por cada campo si se proporcionó
             if proveedor:
                 QS_Proveedor = QS_Proveedor.filter(proveedor__icontains=proveedor)
-                print(QS_Proveedor)
+
                 
                 
             if telefono:
                 QS_Proveedor = QS_Proveedor.filter(telefono__icontains=telefono)
-                print(QS_Proveedor)
+
                 
-                 
+            
             if correo:
                 QS_Proveedor = QS_Proveedor.filter(correo__icontains=correo)
-                print(QS_Proveedor)
+
                 
 
             # Convertimos la queryset en un objeto serializado
