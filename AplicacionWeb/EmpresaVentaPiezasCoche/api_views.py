@@ -271,3 +271,52 @@ def busquedaAvanzadaProveedor(request):
     else:
         # Si no hay parámetros en la query
         return Response({"error": "Debe proporcionar al menos un parámetro de búsqueda."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    
+#post patch put delete
+@api_view(['GET'])
+def proveedor_list(request):
+    proveedor = Proveedor.objects.all()
+    serializer = ProveedorSerializer(proveedor, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def proveedor_create(request): 
+    print(request.data)
+    proveedorCreateSerializer = ProveedorSerializerCreate(data=request.data)
+    if proveedorCreateSerializer.is_valid():
+        try:
+            proveedorCreateSerializer.save()
+            return Response("proveedor CREADO")
+        except serializers.ValidationError as error:
+            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            print(repr(error))
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(ProveedorSerializerCreate.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET']) 
+def proveedor_obtener(request,proveedor_id):
+    proveedor = Proveedor.objects.get(id=proveedor_id)
+    serializer = ProveedorSerializer(proveedor)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+def proveedores_editar(request,proveedor_id):
+    print(request.data)
+    print(request)
+    proveedores = Proveedor.objects.get(id=proveedor_id)
+    proveedoresCreateSerializer = ProveedorSerializerCreate(data=request.data,instance=proveedores)
+    if proveedoresCreateSerializer.is_valid():
+        try:
+            proveedoresCreateSerializer.save()
+            return Response("Proveedor EDITADO")
+        except serializers.ValidationError as error:
+            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(proveedoresCreateSerializer.errors, status=status.HTTP_400_BAD_REQUEST)

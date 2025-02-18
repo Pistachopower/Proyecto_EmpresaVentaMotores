@@ -170,3 +170,66 @@ class PiezaMotorPedidoSerializer(serializers.ModelSerializer):
             'precioTotal',
         )
 
+
+
+#post delete patch 
+class ProveedorSerializerCreate(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Proveedor
+        fields = ['proveedor','telefono','correo',
+                  'direccion']
+    
+    def validate_nombre(self,proveedor):
+        proveedorNombre = Proveedor.objects.filter(proveedor=proveedor).first()
+        if(not proveedorNombre is None):
+             if(not self.instance is None and proveedorNombre.id == self.instance.id):
+                 pass
+             else:
+                raise serializers.ValidationError('Ya existe un proveedor con ese nombre')
+            
+        
+        return proveedor
+    
+    def validate_telefono(self,telefono):
+        proveedorTelefono = Proveedor.objects.filter(telefono=telefono).first()
+        if(not proveedorTelefono  is None
+           ):
+             if(not self.instance is None and proveedorTelefono .id == self.instance.id):
+                 pass
+             else:
+                raise serializers.ValidationError('Ya existe un proveedor con ese telefono')
+            
+        
+        return telefono
+    
+    def validate_correo(self,correo):
+        proveedorCorreo = Proveedor.objects.filter(correo=correo).first()
+        if(not proveedorCorreo is None
+           ):
+             if(not self.instance is None and proveedorCorreo.id == self.instance.id):
+                 pass
+             else:
+                raise serializers.ValidationError('Ya existe un proveedor con ese correo')
+            
+        
+        return correo
+    
+    
+    def validate_direccion(self,direccion):
+        proveedorDireccion = Proveedor.objects.filter(direccion=direccion).first()
+        if(not proveedorDireccion is None
+           ):
+             if(not self.instance is None and proveedorDireccion.id == self.instance.id):
+                 pass
+             else:
+                raise serializers.ValidationError('Ya existe un proveedor con ese direccion')
+            
+        
+        return direccion
+    
+    
+    
+    
+    
+    
