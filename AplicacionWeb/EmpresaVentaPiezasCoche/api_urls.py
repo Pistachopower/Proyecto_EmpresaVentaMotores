@@ -22,8 +22,11 @@ urlpatterns= [
     path('busqueda-avanzada-proveedor/',busquedaAvanzadaProveedor,name='busquedaAvanzadaProveedor'),
 
     #patch put delete
-    path('proveedores/listar/',proveedor_list),
+    path('proveedores/proveedores_listar/',proveedor_list),
     path('proveedores/crear/',proveedor_create),
-    path('proveedores/<int:proveedor_id>',proveedor_obtener),
-    path('proveedores/editar/<int:proveedor_id>',proveedores_editar),
+    path('proveedores/<int:proveedor_id>/',proveedor_obtener),
+    path('proveedores/editar/<int:proveedor_id>/',proveedores_editar),
+    path('proveedores/editar/nombre/<int:proveedor_id>/',proveedores_editar_patch),
+    path('proveedores/eliminar/<int:proveedor_id>/',proveedores_eliminar,name='proveedores_eliminar'),
+
 ]

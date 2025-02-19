@@ -295,7 +295,7 @@ def proveedor_create(request):
             print(repr(error))
             return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
-        return Response(ProveedorSerializerCreate.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(proveedorCreateSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET']) 
 def proveedor_obtener(request,proveedor_id):
@@ -306,8 +306,6 @@ def proveedor_obtener(request,proveedor_id):
 
 @api_view(['PUT'])
 def proveedores_editar(request,proveedor_id):
-    print(request.data)
-    print(request)
     proveedores = Proveedor.objects.get(id=proveedor_id)
     proveedoresCreateSerializer = ProveedorSerializerCreate(data=request.data,instance=proveedores)
     if proveedoresCreateSerializer.is_valid():
@@ -320,3 +318,29 @@ def proveedores_editar(request,proveedor_id):
             return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(proveedoresCreateSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['PATCH'])
+def proveedores_editar_patch(request,proveedor_id):
+    proveedores = Proveedor.objects.get(id=proveedor_id)
+    proveedoresCreateSerializer = ProveedorSerializerActualizarNombre(data=request.data,instance=proveedores)
+    if proveedoresCreateSerializer.is_valid():
+        try:
+            proveedoresCreateSerializer.save()
+            return Response("Proveedor EDITADO")
+        except serializers.ValidationError as error:
+            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(proveedoresCreateSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+def proveedores_eliminar(request,proveedor_id):
+    proveedor = Proveedor.objects.get(id=proveedor_id)
+    try:
+        proveedor.delete()
+        return Response("proveedor ELIMINADO") #PREGUNTAR A JORGE
+    except Exception as error:
+        return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)

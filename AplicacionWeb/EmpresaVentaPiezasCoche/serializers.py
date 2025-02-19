@@ -172,7 +172,7 @@ class PiezaMotorPedidoSerializer(serializers.ModelSerializer):
 
 
 
-#post delete patch 
+#post delete patch (CAMBIAR EL NOMBRE DE LA CLASE A ACTUALIZAR)
 class ProveedorSerializerCreate(serializers.ModelSerializer):
     
     class Meta:
@@ -180,56 +180,51 @@ class ProveedorSerializerCreate(serializers.ModelSerializer):
         fields = ['proveedor','telefono','correo',
                   'direccion']
     
-    def validate_nombre(self,proveedor):
-        proveedorNombre = Proveedor.objects.filter(proveedor=proveedor).first()
-        if(not proveedorNombre is None):
-             if(not self.instance is None and proveedorNombre.id == self.instance.id):
-                 pass
-             else:
-                raise serializers.ValidationError('Ya existe un proveedor con ese nombre')
+    def validate_proveedor(self,proveedor_nombre):
+        proveedor = Proveedor.objects.filter(proveedor=proveedor_nombre).first()
+        if(not proveedor is None):#sino es nulo
+             if(proveedor.proveedor == proveedor_nombre):
+                 raise serializers.ValidationError('Ya existe un proveedor con ese nombre')
+
             
         
         return proveedor
     
-    def validate_telefono(self,telefono):
-        proveedorTelefono = Proveedor.objects.filter(telefono=telefono).first()
-        if(not proveedorTelefono  is None
-           ):
-             if(not self.instance is None and proveedorTelefono .id == self.instance.id):
-                 pass
-             else:
-                raise serializers.ValidationError('Ya existe un proveedor con ese telefono')
+    def validate_telefono(self,telefono_proveedor):
+        proveedor = Proveedor.objects.filter(telefono=telefono_proveedor).first()
+        if(not proveedor  is None): #sino esta vacio
+             if(proveedor.telefono == telefono_proveedor):
+                 raise serializers.ValidationError('Ya existe un proveedor con ese telefono')
             
-        
-        return telefono
+        return proveedor
     
-    def validate_correo(self,correo):
-        proveedorCorreo = Proveedor.objects.filter(correo=correo).first()
-        if(not proveedorCorreo is None
-           ):
-             if(not self.instance is None and proveedorCorreo.id == self.instance.id):
-                 pass
-             else:
+    def validate_correo(self,correo_proveedor):
+        proveedor = Proveedor.objects.filter(correo=correo_proveedor).first()
+        if(not proveedor is None):
+             if(proveedor.correo == correo_proveedor):
                 raise serializers.ValidationError('Ya existe un proveedor con ese correo')
-            
-        
-        return correo
+  
+        return proveedor
     
     
-    def validate_direccion(self,direccion):
-        proveedorDireccion = Proveedor.objects.filter(direccion=direccion).first()
-        if(not proveedorDireccion is None
-           ):
-             if(not self.instance is None and proveedorDireccion.id == self.instance.id):
-                 pass
-             else:
+    def validate_direccion(self,direccion_proveedor):
+        proveedor = Proveedor.objects.filter(direccion=direccion_proveedor).first()
+        if(not proveedor is None):
+             if(proveedor.direccion == direccion_proveedor):
                 raise serializers.ValidationError('Ya existe un proveedor con ese direccion')
-            
-        
-        return direccion
+        return proveedor
     
     
+class ProveedorSerializerActualizarNombre(serializers.ModelSerializer):
     
+    class Meta:
+        model = Proveedor
+        fields = ['proveedor']
     
-    
+    def validate_proveedor(self,proveedor_nombre):
+        proveedor = Proveedor.objects.filter(proveedor=proveedor_nombre).first()
+        if(not proveedor is None):#sino es nulo
+             if(proveedor.proveedor == proveedor_nombre):
+                 raise serializers.ValidationError('Ya existe un proveedor con ese nombre')       
+        return proveedor
     
