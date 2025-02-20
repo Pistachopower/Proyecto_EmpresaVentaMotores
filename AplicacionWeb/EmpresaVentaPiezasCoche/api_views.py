@@ -327,7 +327,7 @@ def proveedores_editar_patch(request,proveedor_id):
     if proveedoresCreateSerializer.is_valid():
         try:
             proveedoresCreateSerializer.save()
-            return Response("Proveedor EDITADO")
+            #return Response("Proveedor EDITADO")
         except serializers.ValidationError as error:
             return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
         except Exception as error:
