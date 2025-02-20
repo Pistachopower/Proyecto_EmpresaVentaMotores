@@ -225,6 +225,6 @@ class ProveedorSerializerActualizarNombre(serializers.ModelSerializer):
         proveedor = Proveedor.objects.filter(proveedor=proveedor_nombre).first()
         if(not proveedor is None):#sino es nulo
              if(proveedor.proveedor == proveedor_nombre):
-                 raise serializers.ValidationError('Ya existe un proveedor con ese nombre')       
-        return proveedor
+                 raise serializers.ValidationError('El proveedor ya existe')       
+        return proveedor_nombre
     

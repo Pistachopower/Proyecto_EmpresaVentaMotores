@@ -322,12 +322,12 @@ def proveedores_editar(request,proveedor_id):
 
 @api_view(['PATCH'])
 def proveedores_editar_patch(request,proveedor_id):
-    proveedores = Proveedor.objects.get(id=proveedor_id)
-    proveedoresCreateSerializer = ProveedorSerializerActualizarNombre(data=request.data,instance=proveedores)
+    proveedor = Proveedor.objects.get(id=proveedor_id)
+    proveedoresCreateSerializer = ProveedorSerializerActualizarNombre(proveedor,data=request.data, partial=True)
     if proveedoresCreateSerializer.is_valid():
         try:
             proveedoresCreateSerializer.save()
-            #return Response("Proveedor EDITADO")
+            return Response("Proveedor EDITADO")
         except serializers.ValidationError as error:
             return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
         except Exception as error:
