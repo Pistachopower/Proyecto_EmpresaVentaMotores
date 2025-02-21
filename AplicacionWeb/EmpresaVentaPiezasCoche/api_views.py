@@ -348,79 +348,8 @@ def proveedores_eliminar(request,proveedor_id):
 
 #pedido metodo de pago  PREGUNTAR
 @api_view(['GET'])
-def pedido_metodopago_lista(request):
+def pedidos_lista(request):
     pedidos = Pedido.objects.select_related('metodo_pago').all()
     serializer = PedidoSerializer_Mejorado(pedidos, many=True)
     return Response(serializer.data)
 
-
-
-@api_view(['POST'])
-def pedido_metodopago_crear(request):
-    print(request.data)
-    pedidoCreateSerializer = PedidoConMetodoPagoSerializerCreate(data=request.data)
-    if pedidoCreateSerializer.is_valid():
-        try:
-            pedidoCreateSerializer.save()
-            return Response("Pedido con método de pago CREADO")
-        except serializers.ValidationError as error:
-            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as error:
-            print(repr(error))
-            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    else:
-        return Response(pedidoCreateSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-@api_view(['PUT'])
-def pedido_metodopago_editar_put(request, pedido_id):
-    try:
-        pedido = Pedido.objects.get(id=pedido_id)
-    except Pedido.DoesNotExist:
-        return Response({"error": "Pedido no encontrado"}, status=status.HTTP_404_NOT_FOUND)
-    
-    pedidoUpdateSerializer = PedidoSerializer_Mejorado(data=request.data, instance=pedido)
-    if pedidoUpdateSerializer.is_valid():
-        try:
-            pedidoUpdateSerializer.save()
-            return Response("Pedido con método de pago EDITADO")
-        except serializers.ValidationError as error:
-            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as error:
-            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    else:
-        return Response(pedidoUpdateSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-@api_view(['PATCH'])
-def pedido_metodopago_editar_patch(request, pedido_id):
-    try:
-        pedido = Pedido.objects.get(id=pedido_id)
-    except Pedido.DoesNotExist:
-        return Response({"error": "Pedido no encontrado"}, status=status.HTTP_404_NOT_FOUND)
-    
-    pedidoUpdateSerializer = PedidoSerializer_Mejorado(data=request.data, instance=pedido, partial=True)
-    if pedidoUpdateSerializer.is_valid():
-        try:
-            pedidoUpdateSerializer.save()
-            return Response("Pedido con método de pago EDITADO")
-        except serializers.ValidationError as error:
-            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as error:
-            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    else:
-        return Response(pedidoUpdateSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-@api_view(['DELETE'])
-def pedido_metodopago_eliminar(request, pedido_id):
-    try:
-        pedido = Pedido.objects.get(id=pedido_id)
-    except Pedido.DoesNotExist:
-        return Response({"error": "Pedido no encontrado"}, status=status.HTTP_404_NOT_FOUND)
-    
-    try:
-        pedido.delete()
-        return Response("Pedido con método de pago ELIMINADO")
-    except Exception as error:
-        return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
