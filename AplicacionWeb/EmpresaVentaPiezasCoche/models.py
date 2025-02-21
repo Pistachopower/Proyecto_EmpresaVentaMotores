@@ -97,7 +97,6 @@ class Pedido(models.Model):
     def __str__(self):
         return self.pedido
 
-#tabla intermedia 
 class PiezaMotor(models.Model):
     pieza = models.CharField(max_length=100)
     proveedor = models.ManyToManyField(Proveedor)

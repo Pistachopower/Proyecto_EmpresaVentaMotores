@@ -188,7 +188,7 @@ class ProveedorSerializerCreate(serializers.ModelSerializer):
 
             
         
-        return proveedor
+        return proveedor_nombre
     
     def validate_telefono(self,telefono_proveedor):
         proveedor = Proveedor.objects.filter(telefono=telefono_proveedor).first()
@@ -196,7 +196,7 @@ class ProveedorSerializerCreate(serializers.ModelSerializer):
              if(proveedor.telefono == telefono_proveedor):
                  raise serializers.ValidationError('Ya existe un proveedor con ese telefono')
             
-        return proveedor
+        return telefono_proveedor
     
     def validate_correo(self,correo_proveedor):
         proveedor = Proveedor.objects.filter(correo=correo_proveedor).first()
@@ -204,7 +204,7 @@ class ProveedorSerializerCreate(serializers.ModelSerializer):
              if(proveedor.correo == correo_proveedor):
                 raise serializers.ValidationError('Ya existe un proveedor con ese correo')
   
-        return proveedor
+        return correo_proveedor
     
     
     def validate_direccion(self,direccion_proveedor):
@@ -212,7 +212,7 @@ class ProveedorSerializerCreate(serializers.ModelSerializer):
         if(not proveedor is None):
              if(proveedor.direccion == direccion_proveedor):
                 raise serializers.ValidationError('Ya existe un proveedor con ese direccion')
-        return proveedor
+        return direccion_proveedor
     
     
 class ProveedorSerializerActualizarNombre(serializers.ModelSerializer):
@@ -227,4 +227,28 @@ class ProveedorSerializerActualizarNombre(serializers.ModelSerializer):
              if(proveedor.proveedor == proveedor_nombre):
                  raise serializers.ValidationError('El proveedor ya existe')       
         return proveedor_nombre
+    
+    
+#pedido metodo de pago
+class PedidoConMetodoPagoSerializerCreate(serializers.ModelSerializer):
+    metodo_pago = MetodoPagoSerializer()  
+
+    class Meta:
+        model = Pedido
+        fields = [
+            'pedido', 
+            'fecha_pedido', 
+            'metodo_pago', ]
+        
+    def validate_pedido(self,pedido_nombre):
+        pedido = Pedido.objects.filter(pedido=pedido_nombre).first()
+        if(not pedido is None):#sino es nulo
+             if(pedido.pedido == pedido_nombre):
+                 raise serializers.ValidationError('El pedido ya existe')       
+        return pedido_nombre
+        
+    
+        
+        
+
     
