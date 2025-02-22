@@ -55,4 +55,9 @@ urlpatterns = [
     path("usuario-lista/", usuario_lista, name="usuario_lista"),
     path("clientes-lista/", clientes_lista, name="clientes_lista"),
     path("pedido-metodopago/crear/", pedidos_create, name="pedidos_create"),
+    path(
+        "pedido/eliminar/<int:pedido_id>/",
+        pedido_eliminar,
+        name="pedido_eliminar",
+    ),
 ]

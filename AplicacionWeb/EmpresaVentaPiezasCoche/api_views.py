@@ -301,7 +301,7 @@ def proveedor_obtener(request, proveedor_id):
     return Response(serializer.data)
 
 
-@api_view(["PUT"])  # PREGUNTAR H
+@api_view(["PUT"])  
 def proveedores_editar(request, proveedor_id):
     proveedores = Proveedor.objects.get(id=proveedor_id)
     proveedoresCreateSerializer = ProveedorSerializerCreate(
@@ -351,7 +351,7 @@ def proveedores_eliminar(request, proveedor_id):
         return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# pedido metodo de pago  PREGUNTAR
+# pedido metodo de pago 
 @api_view(["GET"])
 def pedidos_lista(request):
     pedidos = Pedido.objects.select_related("metodo_pago").all()
@@ -394,3 +394,14 @@ def pedidos_create(request):
             return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#pedido_eliminar
+@api_view(["DELETE"])
+def pedido_eliminar(request, pedido_id):
+    pedido = Pedido.objects.get(id=pedido_id)
+    try:
+        pedido.delete()
+        return Response("pedido ELIMINADO") 
+    except Exception as error:
+        return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
