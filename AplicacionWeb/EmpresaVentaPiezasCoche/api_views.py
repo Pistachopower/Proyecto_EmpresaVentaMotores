@@ -405,3 +405,24 @@ def pedido_eliminar(request, pedido_id):
         return Response("pedido ELIMINADO") 
     except Exception as error:
         return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+
+#pedido_editar_patch
+@api_view(["PATCH"])
+def pedido_editar_patch(request, pedido_id):
+    pedido = Pedido.objects.get(id=pedido_id)
+    pedidoCreateSerializer = ProveedorSerializerActualizarNombre(
+        pedido, data=request.data, partial=True
+    )
+    if pedidoCreateSerializer.is_valid():
+        try:
+            pedidoCreateSerializer.save()
+            return Response("Nombre de pedido EDITADO")
+        except serializers.ValidationError as error:
+            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(
+            pedidoCreateSerializer.errors, status=status.HTTP_400_BAD_REQUEST
+        )

@@ -284,3 +284,16 @@ class PedidoConMetodoPagoSerializerCreate(serializers.ModelSerializer):
                 "El usuario seleccionado no existe"
             )
         return usuario
+
+class PedidoSerializerActualizarNombre(serializers.ModelSerializer):
+
+    class Meta:
+        model = Pedido
+        fields = ["pedido"]
+
+    def validate_pedido(self, pedido_nombre):
+        pedido = Pedido.objects.filter(pedido=pedido_nombre).first()
+        if not pedido is None:  # sino es nulo
+            if pedido.pedido == pedido_nombre:
+                raise serializers.ValidationError("El nombre del pedido ya existe")
+        return pedido_nombre

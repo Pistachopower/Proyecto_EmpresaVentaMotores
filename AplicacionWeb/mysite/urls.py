@@ -29,7 +29,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('',include("EmpresaVentaPiezasCoche.urls")),
     path('api/v1/',include("EmpresaVentaPiezasCoche.api_urls")),
-    #path('api/v2/',include("EmpresaVentaPiezasCoche.api_urls_v2")),
     path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')) #para los tokens
 
 
