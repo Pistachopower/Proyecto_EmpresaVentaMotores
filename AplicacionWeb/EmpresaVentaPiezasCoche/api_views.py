@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from .forms import *
 from django.db.models import Q
+from rest_framework.viewsets import ViewSet
 
 
 @api_view(["GET"])
@@ -301,7 +302,7 @@ def proveedor_obtener(request, proveedor_id):
     return Response(serializer.data)
 
 
-@api_view(["PUT"])  
+@api_view(["PUT"])
 def proveedores_editar(request, proveedor_id):
     proveedores = Proveedor.objects.get(id=proveedor_id)
     proveedoresCreateSerializer = ProveedorSerializerCreate(
@@ -351,7 +352,7 @@ def proveedores_eliminar(request, proveedor_id):
         return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# pedido metodo de pago 
+# pedido metodo de pago
 @api_view(["GET"])
 def pedidos_lista(request):
     pedidos = Pedido.objects.select_related("metodo_pago").all()
@@ -396,22 +397,39 @@ def pedidos_create(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#pedido_eliminar
+@api_view(["PUT"])
+def pedidos_update(request, pedido_id):
+    pedido = Pedido.objects.get(id=pedido_id)
+    serializer = PedidoConMetodoPagoSerializerUpdate(pedido, data=request.data)
+    if serializer.is_valid():
+        try:
+            serializer.save()
+            return Response("Pedido ACTUALIZADO")
+        except serializer.ValidationError as error:
+            return Response(error.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as error:
+            print(repr(error))
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# pedido_eliminar
 @api_view(["DELETE"])
 def pedido_eliminar(request, pedido_id):
     pedido = Pedido.objects.get(id=pedido_id)
     try:
         pedido.delete()
-        return Response("pedido ELIMINADO") 
+        return Response("pedido ELIMINADO")
     except Exception as error:
         return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
 
-#pedido_editar_patch
+
+# pedido_editar_patch
 @api_view(["PATCH"])
 def pedido_editar_patch(request, pedido_id):
     pedido = Pedido.objects.get(id=pedido_id)
-    pedidoCreateSerializer = ProveedorSerializerActualizarNombre(
+    pedidoCreateSerializer = PedidoConMetodoPagoSerializerCreate(
         pedido, data=request.data, partial=True
     )
     if pedidoCreateSerializer.is_valid():
@@ -426,3 +444,59 @@ def pedido_editar_patch(request, pedido_id):
         return Response(
             pedidoCreateSerializer.errors, status=status.HTTP_400_BAD_REQUEST
         )
+
+
+@api_view(["GET"])
+def pedido_obtener(request, pedido_id):
+    pedido = Pedido.objects.get(id=pedido_id)
+    serializer = PedidoSerializer_Mejorado(pedido)
+    return Response(serializer.data)
+
+
+# VIEWSETS
+
+
+class PiezaMotorPedidoViewSet(ViewSet):
+    def list(self, request):
+        queryset = PiezaMotor_Pedido.objects.all()
+        serializer = PiezaMotorPedidoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = PiezaMotorPedidoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data, status=201
+            )  # Respuesta de creación exitosa
+        return Response(serializer.errors, status=400)
+
+    def retrieve(self, request, pk=None):
+        pieza_motor_pedido = PiezaMotor_Pedido.objects.get(pk=pk)
+        serializer = PiezaMotorPedidoSerializer(pieza_motor_pedido)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        pieza_motor_pedido = PiezaMotor_Pedido.objects.get(pk=pk)
+        serializer = PiezaMotorPedidoSerializer(
+            pieza_motor_pedido, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def patch(self, request, pk=None):
+        pieza_motor_pedido = PiezaMotor_Pedido.objects.get(pk=pk)
+        serializer = PiezaMotorPedidoSerializer(
+            pieza_motor_pedido, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        pieza_motor_pedido = PiezaMotor_Pedido.objects.get(pk=pk)
+        pieza_motor_pedido.delete()
+        return Response(status=204)  # Respuesta de eliminación exitosa

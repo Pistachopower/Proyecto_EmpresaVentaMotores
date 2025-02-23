@@ -172,8 +172,8 @@ class PiezaMotorSerializer(serializers.ModelSerializer):
 
 # Serializer para la tabla intermedia PiezaMotor_Pedido
 class PiezaMotorPedidoSerializer(serializers.ModelSerializer):
-    pieza = PiezaMotorSerializer()  # Incluye detalles de la pieza
-    pedido = PedidoSerializer_Mejorado()  # Incluye detalles del pedido
+    # pieza = PiezaMotorSerializer()  # Incluye detalles de la pieza
+    # pedido = PedidoSerializer_Mejorado()  # Incluye detalles del pedido
 
     class Meta:
         model = PiezaMotor_Pedido
@@ -251,8 +251,8 @@ class ProveedorSerializerActualizarNombre(serializers.ModelSerializer):
 class PedidoConMetodoPagoSerializerCreate(serializers.ModelSerializer):
 
     class Meta:
-            model = Pedido
-            fields = '__all__'
+        model = Pedido
+        fields = "__all__"
 
     def validate_pedido(self, pedido_nombre):
         pedido = Pedido.objects.filter(pedido=pedido_nombre).first()
@@ -263,33 +263,59 @@ class PedidoConMetodoPagoSerializerCreate(serializers.ModelSerializer):
 
     def validate_fecha_pedido(self, pedido_fecha):
         fechaHoy = date.today()
-        if  pedido_fecha != fechaHoy:
-            raise serializers.ValidationError(
-                "La fecha del pedido debe ser hoy"
-            )
+        if pedido_fecha != fechaHoy:
+            raise serializers.ValidationError("La fecha del pedido debe ser hoy")
         return pedido_fecha
 
     def validate_metodo_pago(self, metodo):
-        metodobd= MetodoPago.objects.get(id= metodo.id)
-        if (metodobd is None):
-            raise serializers.ValidationError(
-                "El metodo seleccionado no existe"
-            )
+        metodobd = MetodoPago.objects.get(id=metodo.id)
+        if metodobd is None:
+            raise serializers.ValidationError("El metodo seleccionado no existe")
         return metodo
-    
+
     def validate_usuario_Pedido(self, usuario):
-        usuariobd= Usuario.objects.get(id= usuario.id)
-        if (usuariobd is None):
-            raise serializers.ValidationError(
-                "El usuario seleccionado no existe"
-            )
+        usuariobd = Usuario.objects.get(id=usuario.id)
+        if usuariobd is None:
+            raise serializers.ValidationError("El usuario seleccionado no existe")
         return usuario
+
+
+class PedidoConMetodoPagoSerializerUpdate(serializers.ModelSerializer):
+
+    class Meta:
+        model = Pedido
+        fields = "__all__"
+
+    # def validate_pedido(self, pedido_nombre):
+    #     pedido = Pedido.objects.filter(pedido=pedido_nombre).first()
+    #     if not pedido is None:
+    #         raise serializers.ValidationError("El pedido a actualizar no existe")
+    #     return pedido_nombre
+
+    def validate_fecha_pedido(self, pedido_fecha):
+        fechaHoy = date.today()
+        if pedido_fecha > fechaHoy:
+            raise serializers.ValidationError("La fecha del pedido no puede ser posterior a hoy")
+        return pedido_fecha
+
+    def validate_metodo_pago(self, metodo):
+        metodobd = MetodoPago.objects.get(id=metodo.id)
+        if metodobd is None:
+            raise serializers.ValidationError("El metodo seleccionado no existe")
+        return metodo
+
+    def validate_usuario_Pedido(self, usuario):
+        usuariobd = Usuario.objects.get(id=usuario.id)
+        if usuariobd is None:
+            raise serializers.ValidationError("El usuario seleccionado no existe")
+        return usuario
+
 
 class PedidoSerializerActualizarNombre(serializers.ModelSerializer):
 
     class Meta:
         model = Pedido
-        fields = ["pedido"]
+        fields = ["id", "pedido"]
 
     def validate_pedido(self, pedido_nombre):
         pedido = Pedido.objects.filter(pedido=pedido_nombre).first()
@@ -297,3 +323,5 @@ class PedidoSerializerActualizarNombre(serializers.ModelSerializer):
             if pedido.pedido == pedido_nombre:
                 raise serializers.ValidationError("El nombre del pedido ya existe")
         return pedido_nombre
+
+

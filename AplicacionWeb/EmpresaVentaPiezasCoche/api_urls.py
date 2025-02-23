@@ -1,7 +1,13 @@
-from django.urls import path
+from django.urls import path, include
 from .api_views import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(
+    r"pieza-motor-pedido", PiezaMotorPedidoViewSet, basename="pieza-motor-pedido"
+)
 
 urlpatterns = [
     path("usuarios", listar_usuarios),
@@ -39,7 +45,7 @@ urlpatterns = [
         name="busquedaAvanzadaProveedor",
     ),
     # patch put delete proveedor
-    path("proveedores/proveedores_listar/", proveedor_list), 
+    path("proveedores/proveedores_listar/", proveedor_list),
     path("proveedores/crear/", proveedor_create),
     path("proveedores/<int:proveedor_id>/", proveedor_obtener),
     path("proveedores/editar/<int:proveedor_id>/", proveedores_editar),
@@ -49,7 +55,6 @@ urlpatterns = [
         proveedores_eliminar,
         name="proveedores_eliminar",
     ),
-    
     # patch put delete pedido metodo de pago
     path("pedidos-lista/", pedidos_lista, name="pedidos_lista"),
     path("metodos-pago-lista/", metodos_pago__lista, name="pedidos_lista"),
@@ -62,5 +67,8 @@ urlpatterns = [
         name="pedido_eliminar",
     ),
     path("pedido-metodopago/editar/nombre/<int:pedido_id>/", pedido_editar_patch),
-
+    path("pedido-metodopago/editar/<int:pedido_id>/", pedidos_update),
+    path("pedido-metodopago/<int:pedido_id>/", pedido_obtener),
+    # Viewsets
+    path("", include(router.urls)),
 ]
