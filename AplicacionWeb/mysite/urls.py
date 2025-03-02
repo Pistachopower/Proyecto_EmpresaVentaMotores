@@ -24,10 +24,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')), #Django incluye las URLs de autenticación prediseñadas de Django en la URL
 
     #para la api
-    path('admin/', admin.site.urls),
-    path("__debug__/", include("debug_toolbar.urls")),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('',include("EmpresaVentaPiezasCoche.urls")),
     path('api/v1/',include("EmpresaVentaPiezasCoche.api_urls")),
     path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')) #para los tokens
 

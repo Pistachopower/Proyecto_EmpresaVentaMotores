@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 from rest_framework.routers import DefaultRouter
 
+#Viewset
 router = DefaultRouter()
 router.register(
     r"pieza-motor-pedido", PiezaMotorPedidoViewSet, basename="pieza-motor-pedido"
@@ -69,6 +70,12 @@ urlpatterns = [
     path("pedido-metodopago/editar/nombre/<int:pedido_id>/", pedido_editar_patch),
     path("pedido-metodopago/editar/<int:pedido_id>/", pedidos_update),
     path("pedido-metodopago/<int:pedido_id>/", pedido_obtener),
+    
     # Viewsets
     path("", include(router.urls)),
+    
+    
+    #sesiones
+    path('registrar/usuario',registrar_usuario.as_view()),
+    path('usuario/token/<str:token>',obtener_usuario_token)
 ]

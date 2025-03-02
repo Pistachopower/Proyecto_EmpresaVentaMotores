@@ -500,3 +500,51 @@ class PiezaMotorPedidoViewSet(ViewSet):
         pieza_motor_pedido = PiezaMotor_Pedido.objects.get(pk=pk)
         pieza_motor_pedido.delete()
         return Response(status=204)  # Respuesta de eliminación exitosa
+
+
+
+#SESIONES 
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+class registrar_usuario(generics.CreateAPIView):
+    serializer_class = UsuarioSerializerRegistro
+    permission_classes = [AllowAny]
+    
+    def create(self, request, *args, **kwargs):
+        serializers = UsuarioSerializerRegistro(data=request.data)
+        if serializers.is_valid():
+            try:
+                rol = request.data.get('rol')
+                user = Usuario.objects.create_user(
+                        nombre= serializers.data.get("nombre"),
+                        last_name= serializers.data.get("last_name"),
+                        telefono= serializers.data.get("telefono"),
+                        username = serializers.data.get("username"), 
+                        correo = serializers.data.get("correo"), 
+                        password = serializers.data.get("password1"),
+                        rol = rol,
+                        )
+                
+
+                if(rol == Usuario.CLIENTE):
+                    cliente = Cliente.objects.create( usuario = user)
+                    cliente.save()
+                elif(rol == Usuario.EMPLEADO):
+                    empleado = Empleado.objects.create(usuario = user)
+                    empleado.save()
+                usuarioSerializado = UsuarioSerializer(user)
+                return Response(usuarioSerializado.data)
+            except Exception as error:
+                print(repr(error))
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+from oauth2_provider.models import AccessToken     
+@api_view(['GET'])
+def obtener_usuario_token(request,token):
+    ModeloToken = AccessToken.objects.get(token=token)
+    usuario = Usuario.objects.get(id=ModeloToken.user_id)
+    serializer = UsuarioSerializer(usuario)
+    return Response(serializer.data)

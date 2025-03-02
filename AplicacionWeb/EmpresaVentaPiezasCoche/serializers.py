@@ -295,7 +295,9 @@ class PedidoConMetodoPagoSerializerUpdate(serializers.ModelSerializer):
     def validate_fecha_pedido(self, pedido_fecha):
         fechaHoy = date.today()
         if pedido_fecha > fechaHoy:
-            raise serializers.ValidationError("La fecha del pedido no puede ser posterior a hoy")
+            raise serializers.ValidationError(
+                "La fecha del pedido no puede ser posterior a hoy"
+            )
         return pedido_fecha
 
     def validate_metodo_pago(self, metodo):
@@ -325,3 +327,26 @@ class PedidoSerializerActualizarNombre(serializers.ModelSerializer):
         return pedido_nombre
 
 
+# SESIONES
+class UsuarioSerializerRegistro(serializers.Serializer):
+    username = serializers.CharField()
+    password1 = serializers.CharField()
+    password2 = serializers.CharField()
+    correo = serializers.EmailField()
+    rol = serializers.IntegerField()
+    nombre = serializers.CharField()
+    last_name = serializers.CharField()
+
+    def validate_username(self, username):
+        usuario = Usuario.objects.filter(username=username).first()
+        if not usuario is None:
+            raise serializers.ValidationError("Ya existe un usuario con ese nombre")
+        return username
+
+    def validate_last_name(self, last_name):
+        print(last_name)
+        return last_name
+
+    def validate_nombre(self, nombre):
+        print(nombre)
+        return nombre
