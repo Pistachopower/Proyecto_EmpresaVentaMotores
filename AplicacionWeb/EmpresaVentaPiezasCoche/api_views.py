@@ -450,7 +450,13 @@ def pedido_editar_patch(request, pedido_id):
 def pedido_obtener(request, pedido_id):
     pedido = Pedido.objects.get(id=pedido_id)
     serializer = PedidoSerializer_Mejorado(pedido)
-    return Response(serializer.data)
+    
+    if request.user.has_perm('EmpresaVentaPiezasCoche.special_access'):
+        return Response(serializer.data)  
+    
+    
+    return Response({"error": "No tienes permiso"}, status=403)  
+    
 
 
 # VIEWSETS

@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework', #para trabajar con la api
     'oauth2_provider',
     'rest_framework_simplejwt',
+    'corsheaders'
 
     
 ]
@@ -115,8 +116,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',    
+    'django.contrib.sessions.middleware.SessionMiddleware',   
+    'corsheaders.middleware.CorsMiddleware' 
      
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
