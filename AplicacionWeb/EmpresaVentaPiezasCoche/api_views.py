@@ -551,7 +551,10 @@ class registrar_usuario(generics.CreateAPIView):
 from oauth2_provider.models import AccessToken     
 @api_view(['GET'])
 def obtener_usuario_token(request,token):
+    # Aquí se busca en la base de datos el AccessToken.
     ModeloToken = AccessToken.objects.get(token=token)
+    
+    #Aquí se obtiene el usuario dueño del token.
     usuario = Usuario.objects.get(id=ModeloToken.user_id)
     serializer = UsuarioSerializer(usuario)
     return Response(serializer.data)
