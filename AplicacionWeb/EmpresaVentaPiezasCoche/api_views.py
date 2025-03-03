@@ -521,6 +521,7 @@ class registrar_usuario(generics.CreateAPIView):
         if serializers.is_valid():
             try:
                 rol = request.data.get('rol')
+                #creacion del usuario
                 user = Usuario.objects.create_user(
                         nombre= serializers.data.get("nombre"),
                         last_name= serializers.data.get("last_name"),
@@ -531,7 +532,7 @@ class registrar_usuario(generics.CreateAPIView):
                         rol = rol,
                         )
                 
-
+                #Creación de perfil según rol:
                 if(rol == Usuario.CLIENTE):
                     cliente = Cliente.objects.create( usuario = user)
                     cliente.save()

@@ -336,17 +336,31 @@ class UsuarioSerializerRegistro(serializers.Serializer):
     rol = serializers.IntegerField()
     nombre = serializers.CharField()
     last_name = serializers.CharField()
+    telefono = serializers.CharField()
 
     def validate_username(self, username):
         usuario = Usuario.objects.filter(username=username).first()
         if not usuario is None:
             raise serializers.ValidationError("Ya existe un usuario con ese nombre")
         return username
+    
+    
+    def validate_correo(self, correo):
+        """Valida que el correo sea único."""
+        usuario = Usuario.objects.filter(correo=correo).first()
+        if usuario is not None:
+            raise serializers.ValidationError("Ya existe un usuario con ese correo electrónico")
+        return correo
+    
+    def validate_contrasena(self, data):
+        """Validaciones que involucran múltiples campos."""
+        # Verificar que las contraseñas coincidan
+        if data.get('password1') != data.get('password2'):
+            raise serializers.ValidationError({"password2": "Las contraseñas no coinciden"})
 
-    def validate_last_name(self, last_name):
-        print(last_name)
-        return last_name
-
-    def validate_nombre(self, nombre):
-        print(nombre)
-        return nombre
+    def validate_telefono(self, telefono):
+        """Valida que el teléfono tenga formato correcto."""
+        import re
+        if not re.match(r'^\+?[0-9]{8,14}$', telefono):
+            raise serializers.ValidationError("El número de teléfono debe contener entre 8 y 14 dígitos, opcionalmente precedido por un signo +")
+        return telefono
