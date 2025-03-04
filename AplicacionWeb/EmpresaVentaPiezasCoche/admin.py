@@ -9,3 +9,6 @@ admin.site.register(Pedido)
 admin.site.register(PiezaMotor)
 admin.site.register(PiezaMotor_Pedido)
 admin.site.register(Usuario)
+
+
+

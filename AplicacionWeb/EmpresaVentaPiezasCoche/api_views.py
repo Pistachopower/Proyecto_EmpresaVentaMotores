@@ -271,9 +271,12 @@ def busquedaAvanzadaProveedor(request):
 # post patch put delete
 @api_view(["GET"])
 def proveedor_list(request):
-    proveedor = Proveedor.objects.all()
-    serializer = ProveedorSerializer(proveedor, many=True)
-    return Response(serializer.data)
+    if request.user.has_perm('EmpresaVentaPiezasCoche.view_proveedor'):
+        proveedor = Proveedor.objects.all()
+        serializer = ProveedorSerializer(proveedor, many=True)
+        return Response(serializer.data)
+    
+    return Response("No tiene permisos para ver proveedores", status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(["POST"])
@@ -355,9 +358,12 @@ def proveedores_eliminar(request, proveedor_id):
 # pedido metodo de pago
 @api_view(["GET"])
 def pedidos_lista(request):
-    pedidos = Pedido.objects.select_related("metodo_pago").all()
-    serializer = PedidoSerializer_Mejorado(pedidos, many=True)
-    return Response(serializer.data)
+    if request.user.has_perm('EmpresaVentaPiezasCoche.view_pedido'):
+        pedidos = Pedido.objects.select_related("metodo_pago").all()
+        serializer = PedidoSerializer_Mejorado(pedidos, many=True)
+        return Response(serializer.data)
+    
+    return Response("No tiene permisos para ver pedidos", status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(["GET"])
@@ -558,3 +564,4 @@ def obtener_usuario_token(request,token):
     usuario = Usuario.objects.get(id=ModeloToken.user_id)
     serializer = UsuarioSerializer(usuario)
     return Response(serializer.data)
+
