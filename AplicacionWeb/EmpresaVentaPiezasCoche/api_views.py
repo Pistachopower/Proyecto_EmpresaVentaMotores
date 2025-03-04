@@ -512,6 +512,7 @@ class PiezaMotorPedidoViewSet(ViewSet):
 #SESIONES 
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
+
 class registrar_usuario(generics.CreateAPIView):
     serializer_class = UsuarioSerializerRegistro
     permission_classes = [AllowAny]
@@ -548,6 +549,8 @@ class registrar_usuario(generics.CreateAPIView):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
+
+
 from oauth2_provider.models import AccessToken     
 @api_view(['GET'])
 def obtener_usuario_token(request,token):
@@ -558,3 +561,62 @@ def obtener_usuario_token(request,token):
     usuario = Usuario.objects.get(id=ModeloToken.user_id)
     serializer = UsuarioSerializer(usuario)
     return Response(serializer.data)
+
+
+#Nueva implementacion pero por probar
+from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from django.contrib.auth.models import Group
+from .models import Usuario, Cliente, Empleado, Proveedor
+from .serializers import UsuarioSerializerRegistro, UsuarioSerializer
+
+class RegistrarUsuario_2(generics.CreateAPIView):
+    serializer_class = UsuarioSerializerRegistro
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                rol = request.data.get('rol')  # Obtiene el rol del usuario
+
+                # Crear el usuario con los datos validados
+                user = Usuario.objects.create_user(
+                    nombre=serializer.validated_data.get("nombre"),
+                    last_name=serializer.validated_data.get("last_name"),
+                    telefono=serializer.validated_data.get("telefono"),
+                    username=serializer.validated_data.get("username"),
+                    correo=serializer.validated_data.get("correo"),
+                    password=serializer.validated_data.get("password1"),
+                    rol=rol
+                )
+
+                # Asignar al usuario un grupo y crear su perfil según el rol
+                if rol == Usuario.CLIENTE:
+                    grupo = Group.objects.get(name='Clientes')
+                    grupo.user_set.add(user)
+                    Cliente.objects.create(usuario=user)
+                elif rol == Usuario.EMPLEADO:
+                    grupo = Group.objects.get(name='Empleados')
+                    grupo.user_set.add(user)
+                    Empleado.objects.create(usuario=user)
+                elif rol == Usuario.PROVEEDOR:
+                    grupo = Group.objects.get(name='Proveedores')
+                    grupo.user_set.add(user)
+                    Proveedor.objects.create(usuario=user)
+
+                # Serializar usuario y retornar respuesta
+                usuario_serializado = UsuarioSerializer(user)
+                return Response(usuario_serializado.data, status=status.HTTP_201_CREATED)
+
+            except Group.DoesNotExist:
+                return Response({"error": "El grupo especificado no existe"}, status=status.HTTP_400_BAD_REQUEST)
+
+            except Exception as error:
+                print(repr(error))
+                return Response({"error": repr(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
