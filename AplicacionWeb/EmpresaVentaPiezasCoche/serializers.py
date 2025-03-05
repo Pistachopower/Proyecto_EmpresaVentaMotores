@@ -273,11 +273,7 @@ class PedidoConMetodoPagoSerializerCreate(serializers.ModelSerializer):
             raise serializers.ValidationError("El metodo seleccionado no existe")
         return metodo
 
-    def validate_usuario_Pedido(self, usuario):
-        usuariobd = Usuario.objects.get(id=usuario.id)
-        if usuariobd is None:
-            raise serializers.ValidationError("El usuario seleccionado no existe")
-        return usuario
+    
 
 
 class PedidoConMetodoPagoSerializerUpdate(serializers.ModelSerializer):
@@ -295,7 +291,9 @@ class PedidoConMetodoPagoSerializerUpdate(serializers.ModelSerializer):
     def validate_fecha_pedido(self, pedido_fecha):
         fechaHoy = date.today()
         if pedido_fecha > fechaHoy:
-            raise serializers.ValidationError("La fecha del pedido no puede ser posterior a hoy")
+            raise serializers.ValidationError(
+                "La fecha del pedido no puede ser posterior a hoy"
+            )
         return pedido_fecha
 
     def validate_metodo_pago(self, metodo):
@@ -325,3 +323,40 @@ class PedidoSerializerActualizarNombre(serializers.ModelSerializer):
         return pedido_nombre
 
 
+# SESIONES
+class UsuarioSerializerRegistro(serializers.Serializer):
+    username = serializers.CharField()
+    password1 = serializers.CharField()
+    password2 = serializers.CharField()
+    correo = serializers.EmailField()
+    rol = serializers.IntegerField()
+    nombre = serializers.CharField()
+    last_name = serializers.CharField()
+    telefono = serializers.CharField()
+
+    def validate_username(self, username):
+        usuario = Usuario.objects.filter(username=username).first()
+        if not usuario is None:
+            raise serializers.ValidationError("Ya existe un usuario con ese nombre")
+        return username
+    
+    
+    def validate_correo(self, correo):
+        """Valida que el correo sea único."""
+        usuario = Usuario.objects.filter(correo=correo).first()
+        if usuario is not None:
+            raise serializers.ValidationError("Ya existe un usuario con ese correo electrónico")
+        return correo
+    
+    def validate_contrasena(self, data):
+        """Validaciones que involucran múltiples campos."""
+        # Verificar que las contraseñas coincidan
+        if data.get('password1') != data.get('password2'):
+            raise serializers.ValidationError({"password2": "Las contraseñas no coinciden"})
+
+    def validate_telefono(self, telefono):
+        """Valida que el teléfono tenga formato correcto."""
+        import re
+        if not re.match(r'^\+?[0-9]{8,14}$', telefono):
+            raise serializers.ValidationError("El número de teléfono debe contener entre 8 y 14 dígitos, opcionalmente precedido por un signo +")
+        return telefono

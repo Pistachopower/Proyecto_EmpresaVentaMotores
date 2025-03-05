@@ -271,9 +271,12 @@ def busquedaAvanzadaProveedor(request):
 # post patch put delete
 @api_view(["GET"])
 def proveedor_list(request):
-    proveedor = Proveedor.objects.all()
-    serializer = ProveedorSerializer(proveedor, many=True)
-    return Response(serializer.data)
+    if request.user.has_perm('EmpresaVentaPiezasCoche.view_proveedor'):
+        proveedor = Proveedor.objects.all()
+        serializer = ProveedorSerializer(proveedor, many=True)
+        return Response(serializer.data)
+    
+    return Response("No tiene permisos para ver proveedores", status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(["POST"])
@@ -355,9 +358,12 @@ def proveedores_eliminar(request, proveedor_id):
 # pedido metodo de pago
 @api_view(["GET"])
 def pedidos_lista(request):
-    pedidos = Pedido.objects.select_related("metodo_pago").all()
-    serializer = PedidoSerializer_Mejorado(pedidos, many=True)
-    return Response(serializer.data)
+    if request.user.has_perm('EmpresaVentaPiezasCoche.view_pedido'):
+        pedidos = Pedido.objects.select_related("metodo_pago").all()
+        serializer = PedidoSerializer_Mejorado(pedidos, many=True)
+        return Response(serializer.data)
+    
+    return Response("No tiene permisos para ver pedidos", status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(["GET"])
@@ -383,7 +389,11 @@ def clientes_lista(request):
 
 @api_view(["POST"])
 def pedidos_create(request):
-    serializer = PedidoConMetodoPagoSerializerCreate(data=request.data)
+    #datos que viene del formulario
+    data= request.data.copy()
+    data['usuario_Pedido'] = request.user.id
+     
+    serializer = PedidoConMetodoPagoSerializerCreate(data= data)
     if serializer.is_valid():
         try:
             serializer.save()
@@ -399,6 +409,9 @@ def pedidos_create(request):
 
 @api_view(["PUT"])
 def pedidos_update(request, pedido_id):
+    if not request.user.has_perm('EmpresaVentaPiezasCoche.change_pedido'):
+        return Response("No tiene permisos para actualizar pedidos", status=status.HTTP_403_FORBIDDEN)
+    
     pedido = Pedido.objects.get(id=pedido_id)
     serializer = PedidoConMetodoPagoSerializerUpdate(pedido, data=request.data)
     if serializer.is_valid():
@@ -412,22 +425,30 @@ def pedidos_update(request, pedido_id):
             return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
 
 
 # pedido_eliminar
 @api_view(["DELETE"])
 def pedido_eliminar(request, pedido_id):
-    pedido = Pedido.objects.get(id=pedido_id)
-    try:
-        pedido.delete()
-        return Response("pedido ELIMINADO")
-    except Exception as error:
-        return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if request.user.has_perm('EmpresaVentaPiezasCoche.delete_pedido'):
+        
+        pedido = Pedido.objects.get(id=pedido_id)
+        try:
+            pedido.delete()
+            return Response("pedido ELIMINADO")
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    return Response("No tienes permisos para eliminar pedidos", status=status.HTTP_403_FORBIDDEN)
 
 # pedido_editar_patch
 @api_view(["PATCH"])
 def pedido_editar_patch(request, pedido_id):
+    if not request.user.has_perm('EmpresaVentaPiezasCoche.change_pedido'):
+        return Response("No tiene permisos para actualizar pedidos", status=status.HTTP_403_FORBIDDEN)
+    
     pedido = Pedido.objects.get(id=pedido_id)
     pedidoCreateSerializer = PedidoConMetodoPagoSerializerCreate(
         pedido, data=request.data, partial=True
@@ -450,7 +471,13 @@ def pedido_editar_patch(request, pedido_id):
 def pedido_obtener(request, pedido_id):
     pedido = Pedido.objects.get(id=pedido_id)
     serializer = PedidoSerializer_Mejorado(pedido)
-    return Response(serializer.data)
+    
+    if request.user.has_perm('EmpresaVentaPiezasCoche.view_pedido'):
+        return Response(serializer.data)  
+    
+    
+    return Response({"error": "No tienes permiso"}, status=403)  
+    
 
 
 # VIEWSETS
@@ -500,3 +527,56 @@ class PiezaMotorPedidoViewSet(ViewSet):
         pieza_motor_pedido = PiezaMotor_Pedido.objects.get(pk=pk)
         pieza_motor_pedido.delete()
         return Response(status=204)  # Respuesta de eliminación exitosa
+
+
+
+#SESIONES 
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+class registrar_usuario(generics.CreateAPIView):
+    serializer_class = UsuarioSerializerRegistro
+    permission_classes = [AllowAny]
+    
+    def create(self, request, *args, **kwargs):
+        serializers = UsuarioSerializerRegistro(data=request.data)
+        if serializers.is_valid():
+            try:
+                rol = request.data.get('rol')
+                #creacion del usuario
+                user = Usuario.objects.create_user(
+                        nombre= serializers.data.get("nombre"),
+                        last_name= serializers.data.get("last_name"),
+                        telefono= serializers.data.get("telefono"),
+                        username = serializers.data.get("username"), 
+                        correo = serializers.data.get("correo"), 
+                        password = serializers.data.get("password1"),
+                        rol = rol,
+                        )
+                
+                #Creación de perfil según rol:
+                if(rol == Usuario.CLIENTE):
+                    cliente = Cliente.objects.create( usuario = user)
+                    cliente.save()
+                elif(rol == Usuario.EMPLEADO):
+                    empleado = Empleado.objects.create(usuario = user)
+                    empleado.save()
+                usuarioSerializado = UsuarioSerializer(user)
+                return Response(usuarioSerializado.data)
+            except Exception as error:
+                print(repr(error))
+                return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+from oauth2_provider.models import AccessToken     
+@api_view(['GET'])
+def obtener_usuario_token(request,token):
+    # Aquí se busca en la base de datos el AccessToken.
+    ModeloToken = AccessToken.objects.get(token=token)
+    
+    #Aquí se obtiene el usuario dueño del token.
+    usuario = Usuario.objects.get(id=ModeloToken.user_id)
+    serializer = UsuarioSerializer(usuario)
+    return Response(serializer.data)
+

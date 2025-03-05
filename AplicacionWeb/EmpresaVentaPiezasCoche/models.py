@@ -25,6 +25,11 @@ class Usuario(AbstractUser):
     nombre = models.CharField(max_length=100)
     telefono = models.CharField(max_length=15, null=True, blank=True)
     correo = models.EmailField(unique=True, max_length=254)
+    
+    def has_perm(self, perm, obj=None):
+        if self.rol == self.ADMINISTRADOR:  # Si es administrador, tiene todos los permisos
+            return True
+        return super().has_perm(perm, obj)
 
 
 # tablas independientes
