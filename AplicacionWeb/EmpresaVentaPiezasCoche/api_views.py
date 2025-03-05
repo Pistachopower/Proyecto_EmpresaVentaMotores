@@ -389,7 +389,11 @@ def clientes_lista(request):
 
 @api_view(["POST"])
 def pedidos_create(request):
-    serializer = PedidoConMetodoPagoSerializerCreate(data=request.data)
+    #datos que viene del formulario
+    data= request.data.copy()
+    data['usuario_Pedido'] = request.user.id
+     
+    serializer = PedidoConMetodoPagoSerializerCreate(data= data)
     if serializer.is_valid():
         try:
             serializer.save()
@@ -405,6 +409,9 @@ def pedidos_create(request):
 
 @api_view(["PUT"])
 def pedidos_update(request, pedido_id):
+    if not request.user.has_perm('EmpresaVentaPiezasCoche.change_pedido'):
+        return Response("No tiene permisos para actualizar pedidos", status=status.HTTP_403_FORBIDDEN)
+    
     pedido = Pedido.objects.get(id=pedido_id)
     serializer = PedidoConMetodoPagoSerializerUpdate(pedido, data=request.data)
     if serializer.is_valid():
@@ -418,22 +425,30 @@ def pedidos_update(request, pedido_id):
             return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
 
 
 # pedido_eliminar
 @api_view(["DELETE"])
 def pedido_eliminar(request, pedido_id):
-    pedido = Pedido.objects.get(id=pedido_id)
-    try:
-        pedido.delete()
-        return Response("pedido ELIMINADO")
-    except Exception as error:
-        return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if request.user.has_perm('EmpresaVentaPiezasCoche.delete_pedido'):
+        
+        pedido = Pedido.objects.get(id=pedido_id)
+        try:
+            pedido.delete()
+            return Response("pedido ELIMINADO")
+        except Exception as error:
+            return Response(repr(error), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    return Response("No tienes permisos para eliminar pedidos", status=status.HTTP_403_FORBIDDEN)
 
 # pedido_editar_patch
 @api_view(["PATCH"])
 def pedido_editar_patch(request, pedido_id):
+    if not request.user.has_perm('EmpresaVentaPiezasCoche.change_pedido'):
+        return Response("No tiene permisos para actualizar pedidos", status=status.HTTP_403_FORBIDDEN)
+    
     pedido = Pedido.objects.get(id=pedido_id)
     pedidoCreateSerializer = PedidoConMetodoPagoSerializerCreate(
         pedido, data=request.data, partial=True
@@ -457,7 +472,7 @@ def pedido_obtener(request, pedido_id):
     pedido = Pedido.objects.get(id=pedido_id)
     serializer = PedidoSerializer_Mejorado(pedido)
     
-    if request.user.has_perm('EmpresaVentaPiezasCoche.special_access'):
+    if request.user.has_perm('EmpresaVentaPiezasCoche.view_pedido'):
         return Response(serializer.data)  
     
     

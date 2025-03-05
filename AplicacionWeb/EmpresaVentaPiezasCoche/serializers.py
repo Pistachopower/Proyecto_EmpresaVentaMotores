@@ -273,11 +273,7 @@ class PedidoConMetodoPagoSerializerCreate(serializers.ModelSerializer):
             raise serializers.ValidationError("El metodo seleccionado no existe")
         return metodo
 
-    def validate_usuario_Pedido(self, usuario):
-        usuariobd = Usuario.objects.get(id=usuario.id)
-        if usuariobd is None:
-            raise serializers.ValidationError("El usuario seleccionado no existe")
-        return usuario
+    
 
 
 class PedidoConMetodoPagoSerializerUpdate(serializers.ModelSerializer):
